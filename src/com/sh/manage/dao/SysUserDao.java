@@ -45,6 +45,16 @@ public class SysUserDao extends AbstractBaseDao<SysUser>{
 		return this.get("from SysUser s where s.usercode = ? and s.password = ?", new Object[]{clazz.getUsercode(),clazz.getPassword()});
 	}
 
+	
+	/**
+	 * 通过用户名查询用户是否存在
+	 * @param usercode
+	 * @return
+	 */
+	public SysUser getUserByUsercode(String usercode) {
+		return this.get("from SysUser s where s.usercode = ? ", new Object[]{usercode});
+	}
+	
 	/**
 	 * 查找系统用户
 	 * @param uid
@@ -62,7 +72,7 @@ public class SysUserDao extends AbstractBaseDao<SysUser>{
 	public List<SysUserDTO> findSysUserDTO(Integer uid) {
 		StringBuffer sbf = new StringBuffer();
 		Object[] params = new Object[]{};
-		sbf.append("select u.uid,u.usercode,u.email,u.terminal_id terminalId,u.name,u.create_time createTime,g.group_name groupName,u.faceimg_aid faceimgAid from t_sys_user u,t_sys_group g where 1=1 and u.group_id = g.id and uid = ?");
+		sbf.append("select u.uid,u.usercode,u.email,u.terminal_id terminalId,u.name,u.create_time createTime,g.group_name groupName,u.faceimg_aid faceimgAid from t_sys_user u left join t_sys_group g on u.group_id = g.id where 1=1 and uid = ?");
 		params = ArrayUtils.add(params, uid);
 		return (List<SysUserDTO>) this.querysqlDTOList(sbf.toString(),params,SysUserDTO.class);
 	}

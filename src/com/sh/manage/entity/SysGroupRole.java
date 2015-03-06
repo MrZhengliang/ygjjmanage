@@ -26,7 +26,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name = "T_SYS_GROUP_ROLE", schema = "SPLATFORM_DB")
+@Table(name = "T_SYS_GROUP_ROLE", schema = "YGJJ")
 public class SysGroupRole implements Serializable {
 
 	/**

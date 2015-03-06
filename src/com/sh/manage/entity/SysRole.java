@@ -30,7 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name = "T_SYS_ROLE", schema = "SPLATFORM_DB")
+@Table(name = "T_SYS_ROLE", schema = "YGJJ")
 public class SysRole implements Serializable {
 
 	/**

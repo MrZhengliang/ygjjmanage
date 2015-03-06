@@ -224,5 +224,15 @@ public class UserService extends BaseService {
 	public void delSysUser(SysUser sUser) {
 		sysUserDao.delete(sUser);
 	}
+	
+	
+	/**
+	 * 通过用户名查询用户是否存在
+	 * @param usercode
+	 * @return
+	 */
+	public SysUser getUserByUsercode(String usercode) {
+		return sysUserDao.getUserByUsercode(usercode);
+	}
 
 }

@@ -161,6 +161,15 @@ background-color
 .emp_ipt {
 	display: none;
 }
+
+.mtb26{
+	margin-top:26px;
+	margin-bottom:26px;
+}
+.mb11{
+	margin-bottom:11px;
+}
+
 .copyright{
 	text-align: center;
 	font-size: 20px;
@@ -178,18 +187,29 @@ background-color
 				class="login-box visible widget-box no-border border start">
 				<div class="widget-main">
 					<h4 class="header blue lighter bigger">
-						<i class="icon-coffee green"></i> 管理平台登陆
+						<i class="icon-coffee green"></i> 管理平台注册
 					</h4>
 					<form id="loginForm" name="loginForm" method="post">
 						<fieldset style="padding: 20px;">
 							<label class="block clearfix" style="margin-bottom: 0px;"> 
 								<div id="empname" class="tip-yellowsimple" style="transform: scale(1, 1) translate(0px);visibility: hidden;opacity: 1;">
+											<div class="tip-inner tip-bg-image">请输入姓名</div>
+											<div class="tip-arrow tip-arrow-top tip-arrow-right tip-arrow-bottom tip-arrow-left" style="visibility: inherit;"></div>
+								</div>
+							<span class="block input-icon input-icon-right"> <input
+									type="text" required="" class="form-control"
+									placeholder="请输入姓名" id="name" name="name" title="请输入姓名" /> <i
+									class="icon-user"></i>						
+							</span>
+							</label>
+							<label class="block clearfix" style="margin-bottom: 0px;"> 
+								<div id="empcode" class="tip-yellowsimple" style="transform: scale(1, 1) translate(0px);visibility: hidden;opacity: 1;">
 											<div class="tip-inner tip-bg-image">请输入用户名</div>
 											<div class="tip-arrow tip-arrow-top tip-arrow-right tip-arrow-bottom tip-arrow-left" style="visibility: inherit;"></div>
 								</div>
 							<span class="block input-icon input-icon-right"> <input
 									type="text" required="" class="form-control"
-									placeholder="Username" id="usercode" name="usercode" title="请输入用户名" /> <i
+									placeholder="请输入用户名" id="usercode" name="usercode" title="请输入用户名" /> <i
 									class="icon-user"></i>						
 							</span>
 							</label>
@@ -200,34 +220,20 @@ background-color
 								</div>
 								<span class="block input-icon input-icon-right"> 
 								<input type="password" required="" class="form-control"
-									placeholder="Password" id="password" name="password" title="请输入密码"/> <i
+									placeholder="请输入密码" id="password" name="password" title="请输入密码"/> <i
 									class="icon-lock"></i>
 								
 								</span>
 							</label>
 <!-- 							<div class="space"></div>
  -->
-							<div class="clearfix">
-								<div id="emprand" class="tip-yellowsimple" style="opacity: 1;transform: scale(1, 1) translate(0px);visibility: hidden;">
-									<div class="tip-inner tip-bg-image">请输入验证码</div>
-									<div class="tip-arrow tip-arrow-left" style="visibility: inherit;"></div>
-								</div>
-								<label class="inline" > 
-								<input type="text"
-									id="rand" name="rand" class="txt" maxlength="4" tabindex="2"
-									AUTOCOMPLETE="off" id="rand" value=""
-									style="margin-right: 5px; width: 66px;" title="请输入验证码"/> 
-									<img style="cursor: pointer;" width="58" id="imgCode" height="21" onclick="changeImg();"/>
-								
-								</label>
+							<div class="clearfix mtb26">
 								<button type="button"
-									class="width-35 pull-right btn btn-sm btn-primary"
-									onclick="dologin();">
-									<i class="icon-key"></i> 登陆
+									class="width-35 btn btn-sm btn-success"
+									onclick="doregister();">
+									<i class="icon-key"></i> 注册
 								</button>
-								
-								<a class="pull-right" href="<%=path %>/unite/toregister.do" target="_self">注册-></a>
-							
+								<a class="mb11" href="<%=path %>/unite/tologin.do" target="_self"><-登陆</a>
 							</div>
 
 							<div class="space-4"></div>
@@ -239,11 +245,9 @@ background-color
 			<!-- /position-relative -->
 	</div>
 	<!-- /.col -->
-	<div  class="copyright">
+	<div class="copyright">
         	XX技术支持,
-        </div>
-<!-- 提示区 -->
-
+    </div>
 
 <!-- 引入js -->
 
@@ -251,39 +255,20 @@ background-color
 <script type="text/javascript" lang="javascript" src="<%=path %>/static/js/jquery.mobile.custom.min.js"></script>
 <script type="text/javascript" lang="javascript" src="<%=path %>/static/js/jquery.poshytip.js"></script>
 
-<!-- inline scripts related to this page -->
-<script type="text/javascript" lang="javascript">
-/* 	var $$ = jQuery.noConflict();
- */			
-
- 
- 			
-</script>
-
-
-
-
 
 <script type="text/javascript" src="<%=path %>/static/js/common/common.js" ></script>
 <script type="text/javascript">
 //body onload事件处理
 $(function(){
-	/**
-	初始化数据
-	*/
-	$('#imgCode').attr("title","点击重新获得验证码!");
-	$('#imgCode').attr("src","<spring:url value='/authImage' htmlEscape='true'/>");
+	
 });
 
-function changeImg(){
-	//修改为可以点击图片切换验证码
-	document.getElementById("imgCode").setAttribute("src","<spring:url value='/authImage' htmlEscape='true'/>?"+new Date().getTime());
-}
+
 
 
 //定义异常信息数组
 var arrTips = [
-'正在登陆...', //0
+'账户已经存在，请更换用户名!', //0
 '您需要登录后才能继续浏览或操作！', //1
 '请输入用户账号！', //2
 '请输入密码!', //3
@@ -308,67 +293,64 @@ var arrTips = [
 
 
 
-	//登陆
-	var dologin = function(){
-		var usercode = document.getElementById("usercode").value;
-		var password = document.getElementById("password").value;
-		var rand = document.getElementById("rand").value;
-		if(usercode == '' || usercode == null){
+	//注册
+	var doregister = function(){
+			
+		var _name = document.getElementById("name").value;
+		var _usercode = document.getElementById("usercode").value;
+		var _password = document.getElementById("password").value;
+		if(_usercode == '' || _usercode == null){
+			$('#empcode').css({'visibility':'inherit'}).fadeIn('slow');
+			return;
+		}
+		if(_name == '' || _name == null){
 			$('#empname').css({'visibility':'inherit'}).fadeIn('slow');
 			return;
 		}
-		if(password == '' || password == null){
+		if(_password == '' || _password == null){
 			$('#emppwd').css({'visibility':'inherit'}).fadeIn('slow');
 			return;
 		}
-		if(rand == '' || rand == null){
-			$('#emprand').css({'visibility':'inherit'}).fadeIn('slow');
-			return;
-		}
 		
-		//document.getElementById("loginForm").action="<spring:url value='/system/user_login.do' htmlEscape='true'/>";
-		//document.getElementById("loginForm").submit();
+		
+		
 		//ajax请求后台，处理
 		jQuery.ajax({
-			url: "<spring:url value="/unite/user_login.do" htmlEscape="true" />",
+			url: "<spring:url value="/unite/unite_register.do" htmlEscape="true" />",
 			method:"post",
-			data:{usercode:usercode,password:password,rand:rand},
+			data:{usercode:_usercode,password:_password,name:_name},
 			success: function(data){
-				var result = eval('(' + data + ')');
-				//alert(result.msg);
-				if(result.data == '0'){
+				if(data == '0'){
 					window.location='<%=path %>/unite/index.do';
-				}else{
-					alert(arrTips[result.data]);
-					changeImg();
+				}else if(data == '0002'){
+					alert(arrTips[0]);
+					return;
 				}
 		     /* var span_new = document.getElementById(spanName);	
 			 span_new.style.display = "none";
 			 span_new.innerHTML = ""; */
 		   }
 		});
+		
 	}
 
 	//隐藏提示
 	$('#usercode').focus(function(){
-		$('#empname').css({'visibility':'hidden'});
+		$('#empcode').css({'visibility':'hidden'});
 	});
 	$('#password').focus(function(){
 		$('#emppwd').css({'visibility':'hidden'});
 	});
-	$('#rand').focus(function(){
-		$('#emprand').css({'visibility':'hidden'});
+	$('#name').focus(function(){
+		$('#empname').css({'visibility':'hidden'});
 	});
 
 	/*回车事件*/
 	$("input").keydown(function(e){
 		if(e.which == 13){
-			dologin();	
+			doregister();	
 		}	
 	});
-	
-	
-
 </script>
 </body>
 </html>

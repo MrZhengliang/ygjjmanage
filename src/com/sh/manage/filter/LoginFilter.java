@@ -39,8 +39,8 @@ public class LoginFilter implements Filter {
 		// 不过滤的uri
 		String[] notFilter = new String[] { "/static/js", "/static/css",
 				"/static/font", "/static/images", "/static/assets",
-				"/unite/tologin", "/unite/tologin.do",
-				"/unite/checkPassword.do", "authImage",
+				"/unite/tologin", "/unite/tologin.do","/unite/toregister.do",
+				"/unite/unite_register.do","/unite/checkPassword.do", "authImage",
 				"/unite/user_login.do","/unite/app_login.do","/upload","/res"};
 		// 请求的uri
 		String uri = httpRequest.getRequestURI();

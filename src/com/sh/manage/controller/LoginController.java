@@ -13,7 +13,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sh.manage.constants.Constants;
 import com.sh.manage.constants.SessionConstants;
+import com.sh.manage.entity.MukeCourse;
 import com.sh.manage.entity.SysAttachment;
 import com.sh.manage.entity.SysMenu;
 import com.sh.manage.entity.SysUser;
@@ -38,6 +42,7 @@ import com.sh.manage.utils.JsonUtils;
 import com.sh.manage.utils.ResponseUtils;
 import com.sh.manage.utils.SafeUtil;
 import com.sh.manage.utils.TimeUtil;
+import com.sh.manage.utils.WebUtils;
 
 /**
  * 后台登陆管理
@@ -131,7 +136,7 @@ public class LoginController {
 			attachment = uploadService.getFile(sysAttachment);
 			model.addObject("attachment",attachment);
 			session.removeAttribute("faceimgpath");
-			session.setAttribute("faceimgpath", attachment.getFilepath());
+			session.setAttribute("faceimgpath", attachment.getFilepath()==null?"":attachment.getFilepath());
 		}
 		
 		logger.info(jsonArr);
@@ -433,5 +438,142 @@ public class LoginController {
 		}while(false);
 		
 		return ResponseUtils.newJsonOKResp("成功！", msg);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// 跳转注册页
+	@RequestMapping(value = "/toregister.do")
+	public ModelAndView registerPage() {
+		return new ModelAndView("/main/register");
+	}
+	
+	/**
+	 * 用户注册
+	 * @return  0002 该账户已经注册
+	 */
+	@RequestMapping(value = "/unite_register.do", method = RequestMethod.POST)
+	public ResponseEntity<String> doRegister(
+			@RequestParam(value = "usercode", required = false, defaultValue = "") String usercode,
+			@RequestParam(value = "password", required = false, defaultValue = "") String password,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			HttpServletRequest request,HttpServletResponse response,
+			Model model) {
+		logger.info("controller:..用户注册!");
+		String msg="";
+		boolean isCorrect = true;
+		HttpHeaders responseHeaders = new HttpHeaders();
+		HttpSession session = request.getSession();
+		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+
+		try{
+			
+			SysUser _db_user = userService.getUserByUsercode(usercode);
+			if(null!=_db_user){
+				//该账户已经注册
+				msg = "0002";
+				return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
+			}
+			//new sysUser
+			SysUser sUser = new SysUser();
+			sUser.setUsercode(usercode);
+			sUser.setPassword(password);
+			sUser.setName(name);
+			sUser.setCreateTime(TimeUtil.now());//时间格式化，去掉-
+			sUser.setStatus(Constants.USER_STATUS_VALID);//默认有效
+			sUser.setLockStatus(Constants.USER_LOCK_NO);//默认为未锁定 0
+			
+			
+			
+			int result = userService.addSysUser(sUser);
+			if(result > 0){
+				
+				// 根据帐户名获得用户对象
+				SysUser sysUser = new SysUser();
+				sysUser.setUsercode(usercode);
+				sysUser.setPassword(password);
+				
+				SysUser loginUser = systemService.getUserInfoByUsername(sysUser);
+				
+				
+				//记录登陆时间和登陆IP
+				loginUser.setLastLoginIP(IPUtil.getIpAddr(request));
+				loginUser.setLastLoginTime(TimeUtil.now());
+				//更新
+				userService.editSysUser(loginUser);
+				
+				
+				//获取用户权限信息
+				LoginUser _loginUser = new LoginUser();
+				_loginUser.setId(loginUser.getUid());
+				_loginUser.setUserCode(loginUser.getUsercode());
+				_loginUser.setUserPwd(loginUser.getPassword());
+				_loginUser.setName(loginUser.getName());
+				_loginUser.setFaceimgAid(loginUser.getFaceimgAid());
+				
+				//权限菜单列表
+				_loginUser.setMenuList(loginService.getMenuList(_loginUser.getId()));
+				//权限操作列表
+				_loginUser.setSoperList(loginService.getSoperList(_loginUser.getId()));
+				
+				
+				//代替nodeList
+				 List<ZTreeNode> treeNodeList = loginService.getNodeList(_loginUser);
+				_loginUser.setNodeList(treeNodeList);
+				
+				/**
+				 * 所有菜单节点  加入缓存
+				 */
+				List<SysMenu> menuList = (List<SysMenu>) loginService.getAllMenuList();
+				//所有菜单数据串 格式：{ id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
+				List<String> items = new ArrayList<String>();
+				String _temp = "{ id:'0', pId:'-1', name:"+"'全选'"+",iconOpen:'"+request.getContextPath()+"/static/js/ztree/zTreeStyle/img/diy/1_open.png'"+", iconClose:'"+request.getContextPath()+"/static/js/ztree/zTreeStyle/img/diy/1_close.png'"+",open:true}";
+				items.add(_temp);
+		    	for(SysMenu menu:menuList){
+		    		_temp = "{id:'"+menu.getId()+"',pId:'"+menu.getMenuPid()+"',name:'"+
+		    		menu.getMenuName()+"'"+",icon:'"+request.getContextPath()+"/static/js/ztree/zTreeStyle/img/diy/2.png'";
+		    		if(menu.getHasChild() == 1){
+		    			//存在子菜单默认打开
+		    			_temp+=",icon:'"+request.getContextPath()+"/static/js/ztree/zTreeStyle/img/diy/4.png'"+",open:true";
+		    		}
+		    		_temp +="}";
+		    		items.add(_temp);
+		    	}
+				menuStrs = JsonUtils.toJson(items);
+				menuStrs = menuStrs.replaceAll("\"", "");
+		    	logger.info("menuStrs:"+menuStrs.toString());
+		    		
+		    	
+				
+				// 默认登陆人员为Admin
+				session.setAttribute(SessionConstants.LOGIN_USER, _loginUser);
+				session.setAttribute("name", _loginUser.getName());
+				session.setAttribute("uid", _loginUser.getId());
+				session.setAttribute("usercode", usercode);
+				
+				session.setAttribute("menuStrs", menuStrs);
+				session.setAttribute("menuList", menuList);
+				session.setAttribute("treeNodeList", treeNodeList);
+				
+				msg="0";
+			}else{
+				msg="用户注册失败!";
+			}
+		}catch(Exception e){
+			logger.error("controller:用户注册异常!"+usercode,e);
+			msg="用户注册出现异常";
+			model.addAttribute("msg", msg);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/toregister.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		}
+		logger.info("controller:用户注册结束!");
+		return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
 	}
 }

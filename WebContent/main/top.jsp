@@ -22,7 +22,7 @@ String ctx = request.getContextPath();
                 <!-- LOGO SECTION -->
                 <header class="navbar-header">
                     <a href="<%=tpath %>/unite/index.do" class="navbar-brand ml20">
-                    	H5 管理系统
+                    	英国接机管理平台
                     </a>
                 </header>
                 <!-- END LOGO SECTION -->
@@ -248,7 +248,7 @@ String ctx = request.getContextPath();
                         </a>
 
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="<%=tpath%>/suserView.do?parentId=${parentId }&uid=<%=session.getAttribute("uid")%>"><i class="icon-user"></i> 个人资料 </a>
+                            <li><a href="<%=tpath%>/suserView.do?parentId=${parentId }&uid=<%=session.getAttribute("uid")%>&ownUid=<%=session.getAttribute("uid")%>"><i class="icon-user"></i> 个人资料 </a>
                             </li>
                             <li><a href="#"><i class="icon-gear"></i> 设置 </a>
                             </li>
