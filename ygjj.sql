@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2015-03-06 13:21:02
+Date: 2015-03-06 18:14:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -115,7 +115,7 @@ CREATE TABLE `t_sys_attachment` (
   `filepath` varchar(100) DEFAULT NULL COMMENT '文件保存路径',
   `uploadtime` datetime DEFAULT NULL COMMENT '上传时间',
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8 COMMENT='附件信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COMMENT='附件信息表';
 
 -- ----------------------------
 -- Records of t_sys_attachment
@@ -139,6 +139,9 @@ INSERT INTO `t_sys_attachment` VALUES ('81', '1', null, null, '11223133_09530933
 INSERT INTO `t_sys_attachment` VALUES ('82', '1', '2', null, '11223133_095309330335_2.jpg', '11223133_095309330335_2.jpg', '/splatform-s3h4-m/res/11223133_095309330335_2.jpg', '2015-02-04 16:18:43');
 INSERT INTO `t_sys_attachment` VALUES ('83', '5', '2', null, 'Wildlife.wmv', 'Wildlife.wmv', '/splatform-s3h4-m/res/Wildlife.wmv', '2015-02-04 16:40:52');
 INSERT INTO `t_sys_attachment` VALUES ('84', '5', '2', null, 'Wildlife.wmv', 'Wildlife.wmv', '/splatform-s3h4-m/res/Wildlife.wmv', '2015-02-04 16:50:45');
+INSERT INTO `t_sys_attachment` VALUES ('85', '1', '13', null, '519b59626b555.jpg', '519b59626b555.jpg', '/splatform-s3h4-m/res/519b59626b555.jpg', '2015-03-06 16:52:07');
+INSERT INTO `t_sys_attachment` VALUES ('86', '1', '13', null, 'Lighthouse.jpg', 'Lighthouse.jpg', '/splatform-s3h4-m/res/Lighthouse.jpg', '2015-03-06 16:55:12');
+INSERT INTO `t_sys_attachment` VALUES ('87', '1', '17', null, 'Penguins.jpg', 'Penguins.jpg', '/splatform-s3h4-m/res/Penguins.jpg', '2015-03-06 17:31:34');
 
 -- ----------------------------
 -- Table structure for `t_sys_dictionary`
@@ -229,7 +232,7 @@ CREATE TABLE `t_sys_menu` (
   `icon_tag` varchar(20) DEFAULT NULL,
   `has_child` tinyint(1) DEFAULT NULL COMMENT '是否有子菜单,1有  0没有',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_sys_menu
@@ -240,8 +243,8 @@ INSERT INTO `t_sys_menu` VALUES ('4', '组织管理', 'group_menu', '2', 'gmanag
 INSERT INTO `t_sys_menu` VALUES ('5', '角色管理', 'role_menu', '2', 'romanage.do', '1', 'add_btn,edit_btn,del_btn,audit_btn', null, '0');
 INSERT INTO `t_sys_menu` VALUES ('6', '用户管理', 'user_menu', '2', 'umanage.do', '1', 'add_btn,edit_btn,del_btn,audit_btn', null, '0');
 INSERT INTO `t_sys_menu` VALUES ('7', '会员管理', 'auser_menu', '2', 'aumanage.do', '1', null, null, '0');
-INSERT INTO `t_sys_menu` VALUES ('8', '课程管理', 'course_menu', '0', '', '0', null, 'icon-table', '1');
-INSERT INTO `t_sys_menu` VALUES ('9', '课程列表', 'courseslist_menu', '8', 'coursemanage.do', '1', null, null, '0');
+INSERT INTO `t_sys_menu` VALUES ('8', '客服管理', 'oakf_menu', '0', '', '0', null, 'icon-table', '1');
+INSERT INTO `t_sys_menu` VALUES ('9', '客服记录', 'kf_menu', '8', 'oakfmanage.do', '1', null, null, '0');
 INSERT INTO `t_sys_menu` VALUES ('10', '商品管理', 'goods_menu', '0', null, '0', null, 'icon-keyboard', '1');
 INSERT INTO `t_sys_menu` VALUES ('11', '商品列表', 'goodslist_menu', '10', '/goods/list.do', '1', null, null, '0');
 INSERT INTO `t_sys_menu` VALUES ('12', '商品审核', 'goodsaudit_menu', '10', '/goods/toAuditList.do', '1', null, null, '0');
@@ -249,6 +252,7 @@ INSERT INTO `t_sys_menu` VALUES ('13', '商品报表', 'goodsreport_menu', '10',
 INSERT INTO `t_sys_menu` VALUES ('16', '订单管理', 'order_menu', '0', null, '0', null, 'icon-exchange', '1');
 INSERT INTO `t_sys_menu` VALUES ('17', '订单审核', 'order_audit', '16', '/order/oaudit.do', '1', null, null, '0');
 INSERT INTO `t_sys_menu` VALUES ('18', '订单报表', 'order_export', '16', '/order/export.do', '1', null, null, '0');
+INSERT INTO `t_sys_menu` VALUES ('19', '激活码', 'jhm_menu', '8', 'oajhmmanage.do', '1', null, null, '0');
 
 -- ----------------------------
 -- Table structure for `t_sys_operate`
@@ -393,13 +397,13 @@ CREATE TABLE `t_sys_user` (
   `group_id` int(8) DEFAULT NULL,
   `faceimg_aid` int(8) DEFAULT NULL COMMENT '头像id，对应attach表aid',
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_sys_user
 -- ----------------------------
 INSERT INTO `t_sys_user` VALUES ('1', 'ceshi1', '123', '981233555@qq.com', 'admin', '10210005555', null, null, null, '0', '1', null, null, '1', null);
-INSERT INTO `t_sys_user` VALUES ('2', 'admin', '123', '981233555@qq.com', '超级管理员', '11110000111', '20141203', '20141202', null, '0', '1', null, null, '1', '82');
+INSERT INTO `t_sys_user` VALUES ('2', 'admin', '123', '981233555@qq.com', '超级管理员', '11110000111', '20141203', '20141202', null, '0', '1', '20150306173334', '127.0.0.1', '1', '82');
 INSERT INTO `t_sys_user` VALUES ('3', 'xiaozhi', '', '12555@126.com', '小智', '15011112222', '20141203', '20141202', null, '0', '1', null, null, '2', null);
 INSERT INTO `t_sys_user` VALUES ('4', 'bigtou', '', '4545115@163.com', '大头哥', '13811112223', '20141225', '20141202', null, '0', '1', null, null, '3', null);
 INSERT INTO `t_sys_user` VALUES ('5', 'kefux', '', '4545115@163.com', '客服YYY', '15011112288', '20141231', '20141202', null, '0', '1', null, null, '4', null);
@@ -408,7 +412,9 @@ INSERT INTO `t_sys_user` VALUES ('8', '超人1', '123', '123@qq.com', '超人1',
 INSERT INTO `t_sys_user` VALUES ('9', 'ceshi1205', '123', '123@126.com', '测试1205', '13011112222', '20141231', '20141205', null, '0', '1', null, null, '4', null);
 INSERT INTO `t_sys_user` VALUES ('10', 'cskf1', '123', '1122@qq.com', '测试客服1', '15011112222', '20150228', '20150126', null, '0', '1', null, null, '2', null);
 INSERT INTO `t_sys_user` VALUES ('11', 'lscs1', '123', '123@qq.com', '老师测试1', '15012134567', '20150228', '20150201', null, '0', '1', null, null, '7', null);
-INSERT INTO `t_sys_user` VALUES ('12', 'ceshi22', '123', '123@qq.com', '测试用户22', '15111112154', '20150228', '20150201', null, '0', '1', null, null, '7', null);
+INSERT INTO `t_sys_user` VALUES ('12', 'ceshi22', '123', '123@qq.com', '测试用户22', '15111112154', '20150228', '20150201', null, '0', '1', '20150306173302', '127.0.0.1', '7', null);
+INSERT INTO `t_sys_user` VALUES ('13', 'ceshi11', '123', null, 'cos450', null, null, '20150306162916', null, '0', '1', '20150306165736', '127.0.0.1', null, '86');
+INSERT INTO `t_sys_user` VALUES ('17', 'ceshi33', '123', null, '测试22', null, null, '20150306173121', null, '0', '1', '20150306173247', '127.0.0.1', null, '87');
 
 -- ----------------------------
 -- Table structure for `t_sys_user_role`
