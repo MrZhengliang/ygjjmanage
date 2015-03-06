@@ -2,6 +2,8 @@ package com.sh.manage.entity;
 
 // default package
 
+import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class TOaSetcar  implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7565604865491715421L;
-	private long id;
+	private Integer id;
      private String targetDate;
      private String usecarDate;
      private String flightNumber;
@@ -91,11 +93,11 @@ public class TOaSetcar  implements java.io.Serializable {
     
     @Column(name="id", unique=true, nullable=false)
 
-    public long getId() {
+    public Integer getId() {
         return this.id;
     }
     
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     

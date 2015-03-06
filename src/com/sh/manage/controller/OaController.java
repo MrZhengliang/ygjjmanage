@@ -115,7 +115,7 @@ public class OaController {
 		
 		// 返回的page对象
 		
-		page = oaService.findAllTOaSetcar(usecarDate, useType, customerName,
+		page = oaService.findAllTOaSetcar(usecarDate==null?"":usecarDate.replaceAll("-", ""), useType, customerName,
 				telephone, taobaoId, weixinCode, pickPeople, remark, pageNo,
 				pageSize);
 

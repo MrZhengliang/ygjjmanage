@@ -81,7 +81,7 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 			sbf.append(" and s.use_type = ?");
 		}
 		if(!StringUtils.isEmpty(remark)){
-			params = ArrayUtils.add(params, remark);
+			//params = ArrayUtils.add(params, remark);
 			sbf.append(" and s.remark like '%"+remark+"%'");
 		}
 		if(!StringUtils.isEmpty(customerName)){

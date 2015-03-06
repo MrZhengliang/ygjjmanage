@@ -20,13 +20,19 @@
 	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 	    vertical-align: middle;
 	    display: inline;
-	    width:15%;
+	    width:12%;
 	}
 	.mr0{
 		margin: 0px 0px 0px 0px;
 	}
 	.col-lg-12{
 		margin: 20px 0 0 10px;
+	}
+	.mlt5{
+		margin:5px 0 0 46px;
+	}
+	.mt5{
+		margin:5px 0 0 0;
 	}
 </style>
 <!-- END HEAD -->
@@ -51,25 +57,48 @@
             <div class="inner" style="min-height:1200px;">
                 <div class="row">
                     <div class="col-lg-12">
-	                        <h5>订车记录管理-订车记录管理</h5>
+	                        <h5>客服管理-定车记录管理</h5>
 	                </div>
 	            </div>
 	            <hr />
 	                <div class="page-header mr0">
 						<form id="suserSearchForm" name="suserSearchForm"
-							action="<spring:url value='/coursemanage.do' htmlEscape='true'/>"
+							action="<spring:url value='/oakfmanage.do' htmlEscape='true'/>"
 							method="post" target="_self">
 							<input type="hidden" id="parentId" name="parentId" value="${parentId }" />
 							<input type="hidden" id="ownId" name="ownId" value="${ownId }" />
 							
-							<i class="icon-hand-right"></i><span>搜索</span> 
-							<input type="text" placeholder="输入订车记录名" class="form-control" 
-									id="search" name="name" value="${name }"
+							<i class="icon-hand-right"></i><span>搜索</span>
+							<input id="usecarDate" class="form-control span2"
+								type="text" name="usecarDate" value="${usecarDate }" placeholder="接送日期" readonly>
+							<select id="useType" name="useType" class="form-control"
+									style="height:33px;width: 130px; background: none repeat scroll 0 0 #f5f5f5 !important;">
+										<option value="0" selected>选择接送类型</option>
+										<option value="1">接</option>
+										<option value="2">送</option>
+										<option value="3">旅游</option>
+										<option value="4">包车</option>
+							</select>
+							<input type="text" placeholder="输入姓名" class="form-control" 
+									id="customerName" name="customerName" value="${customerName }"
+								autocomplete="off" />
+							<input type="text" placeholder="联系电话" class="form-control" 
+									id="telephone" name="telephone" value="${telephone }"
+								autocomplete="off" />
+							<input type="text" placeholder="淘宝" class="form-control" 
+									id="taobaoId" name="taobaoId" value="${taobaoId }"
+								autocomplete="off" />
+							<input type="text" placeholder="微信" class="form-control" 
+									id="weixinCode" name="weixinCode" value="${weixinCode }"
 								autocomplete="off" /> 
-							<input id="startDate" class="form-control span2"
-								type="text" name="startDate" value="${startDate }" placeholder="上传日期" readonly>
+							<input type="text" placeholder="接机人" class="form-control" 
+									id="pickPeople" name="pickPeople" value="${pickPeople }"
+								autocomplete="off" />
+							<input type="text" placeholder="备注" class="form-control mlt5" 
+									id="remark" name="remark" value="${remark }"
+								autocomplete="off" />
 							
-							<button class="btn btn-default" type="button" onClick="submitSearchForm()">
+							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
 							</button>
 						</form>
@@ -143,7 +172,7 @@
 												<c:if test="${page.totalRowNum>0}">
 													<c:if test="${page.totalRowNum >= pageSize}">
 														<tr class="page_c">
-															<td colspan="9">${page.display}</td>
+															<td colspan="15">${page.display}</td>
 														</tr>
 													</c:if>
 												</c:if>
@@ -192,7 +221,7 @@
   	//订车记录新增
     var addSetcar = function(){
     		var diag = new zDialog();
-    		diag.Height = 450;
+    		diag.Height = 430;
         	diag.Title = "订车记录管理-订车记录新增";
         	diag.URL = "<%=path %>/toAddOaKf.do";
         	diag.OKEvent = function(){
@@ -242,7 +271,7 @@
 
 <iframe name="targetFrame" style="width: 0%; display: none;"></iframe>
 <script type="text/javascript">
-				$('#startDate').datepicker({format:"yyyy-mm-dd"});
+				$('#usecarDate').datepicker({format:"yyyy-mm-dd"});
 				//提交搜索
 				
 				var submitSearchForm = function(){

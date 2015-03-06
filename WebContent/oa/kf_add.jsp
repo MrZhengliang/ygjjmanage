@@ -33,7 +33,7 @@
 	.box_l_h_c li{
 	    display:block;
 	    float:left;
-	    margin:20px 0 0 10px;
+	    margin:15px 0 0 10px;
 	}
 	.display_none{
 		display: none;
