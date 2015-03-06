@@ -23,10 +23,12 @@ import com.sh.manage.constants.SessionConstants;
 import com.sh.manage.entity.MukeCourse;
 import com.sh.manage.entity.MukeCourseType;
 import com.sh.manage.entity.SysAttachment;
+import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.module.page.Page;
 import com.sh.manage.pojo.LoginUser;
 import com.sh.manage.pojo.MukeCourseDTO;
 import com.sh.manage.service.CourseService;
+import com.sh.manage.service.OaService;
 import com.sh.manage.service.UploadService;
 import com.sh.manage.service.UserService;
 import com.sh.manage.utils.TimeUtil;
@@ -46,6 +48,9 @@ public class OaController {
 	/**
 	 * 客服客服管理service
 	 */
+	@Autowired
+	private OaService oaService;
+	
 	@Autowired
 	private UserService userService;
 
@@ -81,8 +86,16 @@ public class OaController {
 	public ModelAndView oaKfManagePage(
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			
+			@RequestParam(value = "sendDate", required = false, defaultValue = "") String sendDate,
+			@RequestParam(value = "usecarDate", required = false, defaultValue = "") String usecarDate,
+			@RequestParam(value = "useType", required = false, defaultValue = "") Integer useType,
+			@RequestParam(value = "customerName", required = false, defaultValue = "") String customerName,
+			@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
+			@RequestParam(value = "pickPeople", required = false, defaultValue = "") String pickPeople,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
 			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
 		// 获取客服以及等级
 		if (null == pageNo) {
@@ -90,34 +103,71 @@ public class OaController {
 		}
 		// 返回客服列表页
 		ModelAndView model = new ModelAndView("/oa/kf_manage");
-		model.addObject("name", name);
-		model.addObject("startDate", startDate);
-		// 返回的page对象
-		page = courseService.findAllMukeCourse(
-				name, startDate.replaceAll("-", ""),
-				pageNo, pageSize);
-		// 客服列表
-		List<MukeCourse> courseList = (List<MukeCourse>) page.getList();
-
-		// 客服类型
-		List<MukeCourseType> courseTypeList = courseService.findAllCourseType();
+		model.addObject("sendDate", sendDate);
+		model.addObject("usecarDate", usecarDate);
+		model.addObject("useType", useType);
+		model.addObject("customerName", customerName);
+		model.addObject("telephone", telephone);
+		model.addObject("taobaoId", taobaoId);
+		model.addObject("weixinCode", weixinCode);
+		model.addObject("pickPeople", pickPeople);
+		model.addObject("remark", remark);
 		
+		// 返回的page对象
+		
+		page = oaService.findAllTOaSetcar(usecarDate, useType, customerName,
+				telephone, taobaoId, weixinCode, pickPeople, remark, pageNo,
+				pageSize);
+
+		// 客服列表
+		List<TOaSetcar> oaSetcarList = (List<TOaSetcar>) page.getList();
+
+
 		// 翻页带参数
-		if(null != name){
-			page.addParam("name",name);
+		if(null != sendDate){
+			page.addParam("sendDate",sendDate);
 		}
-		if(null != startDate){
-			page.addParam("startDate",startDate);
+		if(null != usecarDate){
+			page.addParam("usecarDate",usecarDate);
 		}
-		model.addObject("startDate", startDate);
-		model.addObject("name", name);
+		if(null != useType){
+			page.addParam("useType",""+useType);
+		}
+		if(null != customerName){
+			page.addParam("customerName",customerName);
+		}
+		if(null != telephone){
+			page.addParam("telephone",telephone);
+		}
+		if(null != taobaoId){
+			page.addParam("taobaoId",taobaoId);
+		}
+		if(null != weixinCode){
+			page.addParam("weixinCode",weixinCode);
+		}
+		if(null != pickPeople){
+			page.addParam("pickPeople",pickPeople);
+		}
+		if(null != remark){
+			page.addParam("remark",remark);
+		}
+		
+		model.addObject("sendDate", sendDate);
+		model.addObject("usecarDate", usecarDate);
+		model.addObject("useType", useType);
+		model.addObject("customerName", customerName);
+		model.addObject("telephone", telephone);
+		model.addObject("taobaoId", taobaoId);
+		model.addObject("weixinCode", weixinCode);
+		model.addObject("pickPeople", pickPeople);
+		model.addObject("remark", remark);
+		
 		model.addObject("pageSize", pageSize);
 		model.addObject("page", page);
 		model.addObject("parentId", parentId);
 		model.addObject("ownId", ownId);
-		model.addObject("courseList", courseList);
-		model.addObject("courseTypeList", courseTypeList);
-		//model.addObject("roleList", roleList);
+		model.addObject("oaSetcarList", oaSetcarList);
+		
 		return model;
 	}
 
@@ -136,26 +186,32 @@ public class OaController {
     	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 		if (null != _loginUser) {
 			// 客服类型
-			List<MukeCourseType> courseTypeList = courseService.findAllCourseType();
-			model.addObject("courseTypeList", courseTypeList);
+
 			model.addObject("loginUser",_loginUser);
-			logger.info("courseTypeList.size:"+courseTypeList.size());
 		}
         return model;
     }
 	
 	
 	/**
-	 * 客服添加
+	 * 客服订车记录添加
 	 * @return
 	 */
 	@RequestMapping(value = "/doAddOaKf.do", method = RequestMethod.POST)
 	public ResponseEntity<String> oaKfAdd(
-			@RequestParam(value = "typeId", required = false, defaultValue = "0") Integer typeId,
-			@RequestParam(value = "img", required = false, defaultValue = "") String img,
-			@RequestParam(value = "info", required = false, defaultValue = "") String info,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "title", required = false, defaultValue = "") String title,
+			@RequestParam(value = "sendDate", required = false, defaultValue = "") String sendDate,
+			@RequestParam(value = "usecarDate", required = false, defaultValue = "") String usecarDate,
+			@RequestParam(value = "useType", required = false, defaultValue = "") Integer useType,
+			@RequestParam(value = "flightNumber", required = false, defaultValue = "") String flightNumber,
+			@RequestParam(value = "customerName", required = false, defaultValue = "") String customerName,
+			@RequestParam(value = "peopleNumber", required = false, defaultValue = "") Integer peopleNumber,
+			@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
+			@RequestParam(value = "qqCode", required = false, defaultValue = "") String qqCode,
+			@RequestParam(value = "pickPeople", required = false, defaultValue = "") String pickPeople,
+			@RequestParam(value = "memCode", required = false, defaultValue = "") String memCode,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
@@ -172,36 +228,41 @@ public class OaController {
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 
-				//new course
-				MukeCourse course = new MukeCourse();
+				//new TOaSetcar
+				TOaSetcar car = new TOaSetcar();
 				
-				// get|new role
-				//SysGroup group = groupService.findSysGroup(suGroupId);
-				course.setCreateTime(TimeUtil.now());
-				course.setImg(img);
-				course.setInfo(info);
-				course.setName(name);
-				course.setTitle(title);
-				course.setTypeId(typeId);
-				course.setUid(_loginUser.getId());
-				course.setStatus(Constants.COURSE_STATUS_INIT);//状态 0待审核  1已审核  2 已下线 ;默认为0
-								
-				int result = courseService.addCourse(course);
+				car.setUseType(useType);//类型
+				car.setTargetDate(TimeUtil.now());//咨询日期，预定日
+				car.setOperateId(_loginUser.getId());//操作员id
+				car.setCustomerName(customerName);//姓名
+				car.setFlightNumber(flightNumber);//航班
+				car.setMemCode(memCode);//会员号
+				car.setTaobaoId(taobaoId);//淘宝
+				car.setWeixinCode(weixinCode);//微信
+				car.setQqCode(qqCode);//QQ
+				car.setUsecarDate(usecarDate.replaceAll("-", ""));//接送日期
+				car.setTelephone(telephone);//联系电话
+				car.setPeopleNumber(peopleNumber);
+				car.setPickPeople(pickPeople);
+				car.setRemark(remark);
+				car.setSendDate(sendDate);
+				
+				int result = oaService.addOaSetcar(car);
 				if(result > 0){
-					msg="客服添加成功!";
+					msg="客服订车记录添加成功!";
 				}else{
-					msg="客服添加失败!";
+					msg="客服订车记录添加失败!";
 				}
 			
 			}
 		}catch(Exception e){
-			logger.error("controller:客服添加异常!"+name,e);
-			msg="客服添加出现异常";
+			logger.error("controller:客服订车记录添加异常!"+customerName,e);
+			msg="客服订车记录添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
-		logger.info("controller:客服添加结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:客服订车记录添加结束!");
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	

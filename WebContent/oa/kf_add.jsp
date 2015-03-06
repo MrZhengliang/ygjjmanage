@@ -54,64 +54,73 @@
 <body>
 	<div id="wrap">
 					<form class="" method="post" id="addForm" name="addForm"
-						action="<spring:url value='/doAddCourse.do' htmlEscape='true'/>" target="_self">
+						action="<spring:url value='/doAddOaKf.do' htmlEscape='true'/>" target="_self">
 						<input type="hidden" name="uid" value="${loginUser.id}">
 						<ul class="box_l_h_c">
 							<li class="box_l_h_c_li">
-								<select id="typeId" name="typeId" class="form-control"
-									style="height:33px;width: 170px; background: none repeat scroll 0 0 #f5f5f5 !important;">
-										<option value="0" selected>请选择类型</option>
-										<c:forEach items="${courseTypeList}" var="type">
-											<option value="${type.id }"
-												onclick="setCoTypeId('${type.id }','${type.name}');"
-											>${type.name}</option>
-										</c:forEach>
+								<select id="useType" name="useType" class="form-control"
+									style="height:33px;width: 195px; background: none repeat scroll 0 0 #f5f5f5 !important;">
+										<option value="0" selected>请选择接送类型</option>
+										<option value="1">接</option>
+										<option value="2">送</option>
+										<option value="3">旅游</option>
+										<option value="4">包车</option>
 								</select>
 							</li>
 							<li class="box_l_h_c_li">
-								<input id="createDate" class="form-control span3" type="text"
-									name="startDate" value="" placeholder="开始日期" readonly>
+								<input id="usecarDate" class="form-control span3" type="text"
+									name="usecarDate" value="" placeholder="接送日期" readonly>
 							</li>
-							<li class="box_l_h_c_li"><input name="name" value="" type="text"
-									placeholder="输入名称" class="form-control span3" id="name"
-									autocomplete="off" /></li>
-							
 							<li class="box_l_h_c_li">
-								<input name="title" id="title" value="" type="text"
-									placeholder="输入标题" class="form-control span3" 
+								<input name="flightNumber" type="text"
+									placeholder="航班" class="form-control span3" id="flightNumber"
+									autocomplete="off" />
+								</li>
+							<li class="box_l_h_c_li">
+								<input name="customerName" id="customerName" type="text"
+									placeholder="姓名" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="peopleNumber" id="peopleNumber" type="text"
+									placeholder="人数" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="telephone" id="telephone" type="text"
+									placeholder="联系电话" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="taobaoId" id="taobaoId" type="text"
+									placeholder="淘宝" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="weixinCode" id="weixinCode" type="text"
+									placeholder="微信" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="qqCode" id="qqCode" type="text"
+									placeholder="QQ" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="pickPeople" id="pickPeople" type="text"
+									placeholder="接机人" class="form-control span3" 
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								<input name="memCode" id="memCode" type="text"
+									placeholder="会员号" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							
 							<li class="box_l_h_c_li">
-								<textarea rows="4" cols="47" name="info" placeholder="输入简介" class="form-control"></textarea>
+								<textarea rows="4" cols="50" name="remark" placeholder="输入备注信息,5000字以内" class="form-control"></textarea>
 							</li>
-							
-							<!-- <li class="box_l_h_c_li" style="clear:both;">
-								<div class="upload_tag fl">
-									<label class="left mgr5" for="etime">上传视频</label>
-									<div id="pic_upload" class="upload_btn_cs">
-										<div id="pic_upload_button" class="upload_Button">
-											<span name="spanButtonPlaceHolder" id="spanButtonPlaceHolder">X</span>
-										</div>
-										<input id="btnCancel" type="button" value=""
-											onclick="cancelUpload();" disabled="disabled" class="display_none"/>
-									</div>
-
-									<input type="hidden" name="videoId" id="videoId" value=""/>
-								</div>
-								<div id="upload_preview" class="upload_div">
-									<label>视频资源：</label>
-									<div id="divFileProgressContainer">
-										<ul id="pic_list" style="">
-											<li>视频1</li>	
-											<li>视频2</li>										
-										</ul>
-										<div style="clear: both;"></div>
-									</div>
-								</div>
-							</li> -->
 						</ul>
-						
 					</form>
 	</div>
 	<!--END MAIN WRAPPER -->
@@ -123,18 +132,18 @@
 
 <iframe name="targetFrame" style="width: 0%; display: none;"></iframe>
 <script type="text/javascript">
-				$('#createDate').datepicker({format:"yyyy-mm-dd"});
+				$('#usecarDate').datepicker({format:"yyyy-mm-dd"});
 				
 				//提交搜索
-				var setCoTypeId = function(typeId,typeName){
+				/* var setCoTypeId = function(typeId,typeName){
 					document.getElementById("typeId").value=typeId;
 				}
 				var setSuStatus = function(suStatus){
 					document.getElementById("status").value=suStatus;
-				}
+				}*/
 				
 </script>    
-<script src="<%=path %>/static/js/swfupload/js/fileprogress.js" type="text/javascript"></script>
+		<script src="<%=path %>/static/js/swfupload/js/fileprogress.js" type="text/javascript"></script>
 		<script src="<%=path %>/static/js/swfupload/js/handlers.js" type="text/javascript"></script>
 		<script src="<%=path %>/static/js/swfupload/js/swfupload.queue.js" type="text/javascript"></script>
 		<script src="<%=path %>/static/js/swfupload/swfupload/swfupload.js" type="text/javascript"></script>

@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sh.manage.dao.CourseDao;
+import com.sh.manage.dao.OaKfDao;
 import com.sh.manage.dao.SysUserDao;
 import com.sh.manage.entity.MukeCourse;
 import com.sh.manage.entity.MukeCourseType;
+import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.exception.SPlatformServiceException;
 import com.sh.manage.module.page.Page;
 import com.sh.manage.pojo.MukeCourseDTO;
+import com.sh.manage.pojo.TOaSetcarDTO;
 
 /**
  * 
@@ -29,6 +32,10 @@ public class OaService extends BaseService {
 	private Logger logger = Logger.getLogger(OaService.class);
 	
 	@Autowired
+	private OaKfDao oaKfDao;
+	
+	
+	@Autowired
 	private CourseDao courseDao;
 
 	@Autowired
@@ -36,82 +43,87 @@ public class OaService extends BaseService {
 
 	
 	/**
-	 * 查找课程
+	 * 查找订车记录
 	 * @param course
 	 */
-	public MukeCourse findCourse(Integer id)throws SPlatformServiceException {
+	public TOaSetcar findSetcar(Integer id)throws SPlatformServiceException {
 		try {
-			List<MukeCourse> courseList = courseDao.findMukeCourse(id);
-			//找到了课程
-			if(null != courseList){
-				return courseList.get(0);
+			List<TOaSetcar> setCarList = oaKfDao.findTOaSetcar(id);
+			//找到了订车记录
+			if(null != setCarList){
+				return setCarList.get(0);
 			}
-			//找不到课程
-			return new MukeCourse();
+			//找不到订车记录
+			return new TOaSetcar();
 		} catch (Exception e) {
-			logger.error("service:查询课程信息出现异常", e);
-			throw new SPlatformServiceException("查询课程信息出现异常");
+			logger.error("service:查询订车记录信息出现异常", e);
+			throw new SPlatformServiceException("查询订车记录信息出现异常");
 		}
 	}
 	
 	/**
-	 * 查找课程其他信息
-	 * @param course
-	 */
-	public MukeCourseDTO findCourseDTO(Integer id)throws SPlatformServiceException {
-		try {
-			List<MukeCourseDTO> courseList = courseDao.findMukeCourseDTO(id);
-			//找到了课程
-			if(null != courseList){
-				return courseList.get(0);
-			}
-			//找不到课程
-			return new MukeCourseDTO();
-		} catch (Exception e) {
-			logger.error("service:查询课程信息出现异常", e);
-			throw new SPlatformServiceException("查询课程信息出现异常");
-		}
-	}
-	
-	/**
-	 * 课程添加
-	 * @param course
-	 */
-	public Integer addCourse(MukeCourse course) {
-		return (Integer) courseDao.save(course);
-	}
-	/**
-	 * 课程修改
-	 * @param course
-	 */
-	public void editCourse(MukeCourse course) {
-		courseDao.update(course);
-	}
-	/**
-	 * 课程删除
-	 * @param course
-	 */
-	public void delCourse(MukeCourse course) {
-		courseDao.delete(course);
-	}
-	
-	/**
-	 * 课程管理页
+	 * 订车记录管理页
 	 * @param name
 	 * @param replaceAll
 	 * @param pageNo
 	 * @param pageSize
 	 * @return
 	 */
-	public Page findAllMukeCourse(String name, String createTime,
-			Integer pageNo, int pageSize) {
-		return courseDao.getAllMukeCourse(name, createTime, pageNo, pageSize);
+	public Page findAllTOaSetcar(String usecarDate,Integer useType,String customerName, String telephone,String taobaoId, String weixinCode,String pickPeople, String remark,Integer pageNo, int pageSize) {
+		return oaKfDao.getAllTOaSetcar(usecarDate, useType, customerName, telephone, taobaoId, weixinCode, pickPeople, remark, pageNo, pageSize);
+	}
+	
+	
+	
+	/**
+	 * 查找订车记录其他信息
+	 * @param course
+	 */
+	public TOaSetcarDTO findTOaSetcarDTO(Integer id)throws SPlatformServiceException {
+		try {
+			List<TOaSetcarDTO> setcarDTOList = oaKfDao.findTOaSetcarDTO(id);
+			//找到了订车记录
+			if(null != setcarDTOList){
+				return setcarDTOList.get(0);
+			}
+			//找不到订车记录
+			return new TOaSetcarDTO();
+		} catch (Exception e) {
+			logger.error("service:查询订车记录信息出现异常", e);
+			throw new SPlatformServiceException("查询订车记录信息出现异常");
+		}
+	}
+	
+	/**
+	 * 订车记录添加
+	 * @param course
+	 */
+	public Integer addOaSetcar(TOaSetcar oaSetcar) {
+		return (Integer) oaKfDao.save(oaSetcar);
+	}
+	
+	
+	/**
+	 * 订车记录修改
+	 * @param course
+	 */
+	public void editOaSetcar(TOaSetcar oaSetcar) {
+		oaKfDao.update(oaSetcar);
 	}
 	/**
-	 * 所有课程类型
-	 * @return
+	 * 订车记录删除
+	 * @param course
 	 */
-	public List<MukeCourseType> findAllCourseType() {
-		return courseDao.getAllCourseType();
+	public void delOaSetcar(TOaSetcar oaSetcar) {
+		oaKfDao.delete(oaSetcar);
 	}
+	
+	
+//	/**
+//	 * 所有订车记录类型
+//	 * @return
+//	 */
+//	public List<MukeCourseType> findAllCourseType() {
+//		return courseDao.getAllCourseType();
+//	}
 }

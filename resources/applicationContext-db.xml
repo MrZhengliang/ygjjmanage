@@ -79,6 +79,9 @@
 				<value>com.sh.manage.entity.SysAttachment</value>
 				<value>com.sh.manage.entity.MukeCourse</value>
 				<value>com.sh.manage.entity.MukeCourseType</value>
+				<value>com.sh.manage.entity.TOaSetcar</value>
+				<value>com.sh.manage.entity.TOaGiffgaff</value>
+				
 			</list>
 		</property>
 	</bean>

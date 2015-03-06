@@ -51,7 +51,7 @@
             <div class="inner" style="min-height:1200px;">
                 <div class="row">
                     <div class="col-lg-12">
-	                        <h5>课程管理-课程管理</h5>
+	                        <h5>订车记录管理-订车记录管理</h5>
 	                </div>
 	            </div>
 	            <hr />
@@ -63,7 +63,7 @@
 							<input type="hidden" id="ownId" name="ownId" value="${ownId }" />
 							
 							<i class="icon-hand-right"></i><span>搜索</span> 
-							<input type="text" placeholder="输入课程名" class="form-control" 
+							<input type="text" placeholder="输入订车记录名" class="form-control" 
 									id="search" name="name" value="${name }"
 								autocomplete="off" /> 
 							<input id="startDate" class="form-control span2"
@@ -82,50 +82,60 @@
 											<thead>
 												<tr>
 													<th class="center">序号</th>
-													<th>课程名</th>
-													<th>标题</th>
-													<th>课程类型</th>
-													<th>有效性</th>
-													<th>添加时间</th>
-													<th>教程截图</th>
-													<th>添加人员</th>
+													<th>咨询日期</th>
+													<th>接送日期</th>
+													<th>航班</th>
+													<th>类型</th>
+													<th>姓名</th>
+													<th>人数</th>
+													<th>联系电话</th>
+													
+													<th>淘宝</th>
+													<th>微信</th>
+													<th>QQ</th>
+													<th>接机人</th>
+													<th>会员号</th>
+													<th>操作员</th>
 													<th>操作</th>
 												</tr>
 											</thead>
 
 											<tbody>
-												<c:forEach items="${courseList}" var="course"
+												<c:forEach items="${oaSetcarList}" var="car"
 													varStatus="status">
 													<tr>
-														<td>${course.id}</td>
-														<td>${course.name}</td>
-														<td>${course.title}</td>
-														<td>${course.cTypeName}</td>
+														<td>${car.id}</td>
+														<td>${car.targetDate}</td>
+														<td>${car.usecarDate}</td>
+														<td>${car.flightNumber}</td>
 														<td>
-															<c:if test="${course.status ==0 }">待审核</c:if>
+														    <!-- 1 接/2送/3旅游/4包车 -->
+															<c:if test="${car.useType ==1 }">接</c:if>
+															<c:if test="${car.useType ==2 }">送</c:if>
+															<c:if test="${car.useType ==3 }">旅游</c:if>
+															<c:if test="${car.useType ==4 }">包车</c:if>
 														</td>
 
-														<td>${course.createTime}</td>
-														<td>${course.img}</td>
-														<td>${course.userName}</td>
-														<td>														
-														<c:if test="${course.id > 0}">
+														<td>${car.customerName}</td>
+														<td>${car.peopleNumber}</td>
+														<td>${car.telephone}</td>
+														
+														<td>${car.taobaoId}</td>
+														<td>${car.weixinCode}</td>
+														<td>${car.qqCode}</td>
+														<td>${car.pickPeople}</td>
+														<td>会员号</td>
+														<td>${car.operateName}</td>
+														<td>													
+														<c:if test="${car.id > 0}">
 															<a data-toggle="modal" href="#suserEdit"
-															onClick="editCourse('${course.id}');"
+															onClick="editSetcar('${car.id}');"
 															class="btn btn-xs btn-primary"><i class="icon-edit"></i></a>
 															<a data-toggle="modal" href="#suserDel"
-																onClick="delSuser('${course.id}','${course.name}');"
+																onClick="delSetcar('${car.id}');"
 																class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 														</c:if>
 															
-														<%-- <c:if test="${sysUser.status == 9}">
-															<a data-toggle="modal" href="#"
-															onClick=""
-															class="btn btn-xs btn-gray"><i class="icon-edit"></i></a>
-															<a data-toggle="modal" href="#"
-																onClick=""
-																class="btn btn-xs btn-gray"><i class="icon-trash"></i></a>
-														</c:if> --%>
 														</td>
 													</tr>
 												</c:forEach>
@@ -144,7 +154,7 @@
 								<!-- /row -->
 							<div
 								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
-								<a onclick="addCourse();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
+								<a onclick="addSetcar();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
 							</div>
 							<div class="hr hr-18 dotted hr-double"></div>
                     </div>
@@ -179,21 +189,21 @@
     <script type="text/javascript">
     
 
-  	//课程新增
-    var addCourse = function(){
+  	//订车记录新增
+    var addSetcar = function(){
     		var diag = new zDialog();
-    		diag.Height = 380;
-        	diag.Title = "课程管理-课程新增";
-        	diag.URL = "<%=path %>/toAddCourse.do";
+    		diag.Height = 450;
+        	diag.Title = "订车记录管理-订车记录新增";
+        	diag.URL = "<%=path %>/toAddOaKf.do";
         	diag.OKEvent = function(){
         		//参数校验
-        		var title = diag.innerDoc.getElementById("title").value;
+        		/* var title = diag.innerDoc.getElementById("title").value;
         		var name = diag.innerDoc.getElementById("name").value;
         		if(title == '' || name == ''){
-        			alert('请输入课程名和姓名');
+        			alert('请输入订车记录名和姓名');
         			//$("input[type='text'][name='usercode']").focus();
         			return;
-        		}
+        		} */
         		
         		//提交表单
         		diag.innerDoc.getElementById('addForm').submit();
@@ -212,17 +222,17 @@
     }
     
     //在父页面提交iframe中的表单
-    //课程编辑
+    //订车记录编辑
     var editCourse = function(id){
     	$('#edit-courseId').val(id);
     	document.getElementById('editForm').submit();
     }
     
     
-    //课程删除
+    //订车记录删除
     var delCourse= function(id,name){
     	$('#del-userId').val(id);
-    	zDialog.confirm('警告：您确认要删除课程['+name+']吗？',function(){
+    	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
     		document.getElementById('delForm').submit();diag.close();
     	});
     }
