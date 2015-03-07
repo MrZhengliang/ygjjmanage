@@ -222,7 +222,7 @@
     var addSetcar = function(){
     		var diag = new zDialog();
     		diag.Height = 430;
-        	diag.Title = "订车记录管理-订车记录新增";
+        	diag.Title = "客服管理-订车记录新增";
         	diag.URL = "<%=path %>/toAddOaKf.do";
         	diag.OKEvent = function(){
         		//参数校验

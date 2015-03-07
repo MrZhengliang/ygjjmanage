@@ -23,6 +23,7 @@ import com.sh.manage.constants.SessionConstants;
 import com.sh.manage.entity.MukeCourse;
 import com.sh.manage.entity.MukeCourseType;
 import com.sh.manage.entity.SysAttachment;
+import com.sh.manage.entity.TOaGiffgaff;
 import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.module.page.Page;
 import com.sh.manage.pojo.LoginUser;
@@ -267,7 +268,7 @@ public class OaController {
 	
 	
 	/**
-	 * 客服编辑页面
+	 * 订车记录编辑页面
 	 * @return
 	 */
 	@RequestMapping(value = "/toEditOaKf.do", method = RequestMethod.POST)
@@ -304,11 +305,11 @@ public class OaController {
 	}
 	
 	/**
-	 * 客服修改
+	 * 订车记录修改
 	 * @return
 	 */
 	@RequestMapping(value = "/doEditOaKf.do", method = RequestMethod.POST)
-	public ResponseEntity<String> oaKfEdit(
+	public ResponseEntity<String> doEditOaKf(
 			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
 			@RequestParam(value = "typeId", required = false, defaultValue = "0") Integer typeId,
 			@RequestParam(value = "img", required = false, defaultValue = "") String img,
@@ -318,7 +319,7 @@ public class OaController {
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服修改!");
+		logger.info("controller:..订车记录修改!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -340,31 +341,31 @@ public class OaController {
 				course.setUid(_loginUser.getId());
 				
 				courseService.editCourse(course);
-				msg="客服修改成功!";
+				msg="订车记录修改成功!";
 			}else{
 				msg="用户未登录!";
 			}
 		}catch(Exception e){
-			logger.error("controller:客服修改异常!"+name,e);
-			msg="客服修改出现异常";
+			logger.error("controller:订车记录修改异常!"+name,e);
+			msg="订车记录修改出现异常";
 			model.addAttribute("msg", msg);
 			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
 			
 		}
-		logger.info("controller:客服修改结束!");
+		logger.info("controller:订车记录修改结束!");
 		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	/**
-	 * 客服删除
+	 * 订车记录删除
 	 * @return
 	 */
-	@RequestMapping(value = "/oaKfDel.do", method = RequestMethod.POST)
-	public ResponseEntity<String> oaKfDel(
+	@RequestMapping(value = "/doDeloaKf.do", method = RequestMethod.POST)
+	public ResponseEntity<String> doDeloaKf(
 			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
 			@RequestParam(value = "status", required = false, defaultValue = "9") Integer status,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服删除!");
+		logger.info("controller:..订车记录删除!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -385,19 +386,6 @@ public class OaController {
 			}else{
 				msg="用户未登录!";
 			}
-			
-//			SysUser sUser 
-//			= userService.findSysUser(uid);
-//			
-//			// get|new role
-//			SysRole role = roleService.findSysRole(suRoleId);
-//			
-//			sUser.setStatus(status);//默认失效
-//			sUser.getRoleList().add(null);//添加关联关系
-//			
-//			//role.getUserList().add(sUser);//添加关联关系
-//			
-//			userService.editSysUser(sUser);//删除是逻辑删除，仅仅是失效，客服;
 			
 		}catch(Exception e){
 			logger.error("controller:客服删除异常!"+id,e);
@@ -455,7 +443,7 @@ public class OaController {
 	/******************************激活码操作*********************/
 	
 	/**
-	 * 跳转客服记录管理页面
+	 * 跳转激活码记录管理页面
 	 * 
 	 * @return
 	 */
@@ -464,84 +452,82 @@ public class OaController {
 	public ModelAndView oaJhmManagePage(
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
 			@RequestParam(value = "name", required = false, defaultValue = "") String name,
 			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
 			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
-		// 获取客服以及等级
+		// 获取激活码以及等级
 		if (null == pageNo) {
 			pageNo = initPageNo;
 		}
-		// 返回客服列表页
-		ModelAndView model = new ModelAndView("/course/course_manage");
-		model.addObject("name", name);
-		model.addObject("startDate", startDate);
-		// 返回的page对象
-		page = courseService.findAllMukeCourse(
-				name, startDate.replaceAll("-", ""),
-				pageNo, pageSize);
-		// 客服列表
-		List<MukeCourse> courseList = (List<MukeCourse>) page.getList();
-
-		// 客服类型
-		List<MukeCourseType> courseTypeList = courseService.findAllCourseType();
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/jhm_manage");
+		model.addObject("masterCard", masterCard);
 		
+		// 返回的page对象
+		page = oaService.findAllTOaGiffgaff(masterCard, pageNo, pageSize);
+		// 激活码列表
+		List<TOaGiffgaff> giffgaffList = (List<TOaGiffgaff>) page.getList();
+
 		// 翻页带参数
-		if(null != name){
-			page.addParam("name",name);
+		if(null != masterCard){
+			page.addParam("masterCard",masterCard);
 		}
-		if(null != startDate){
-			page.addParam("startDate",startDate);
-		}
-		model.addObject("startDate", startDate);
-		model.addObject("name", name);
 		model.addObject("pageSize", pageSize);
 		model.addObject("page", page);
+		
 		model.addObject("parentId", parentId);
 		model.addObject("ownId", ownId);
-		model.addObject("courseList", courseList);
-		model.addObject("courseTypeList", courseTypeList);
-		//model.addObject("roleList", roleList);
+		
+		model.addObject("giffgaffList", giffgaffList);
+		model.addObject("masterCard", masterCard);
+		
 		return model;
 	}
 	
 	
 	/**
-	 * 跳转客服添加页面
+	 * 跳转激活码添加页面
 	 */
 	@RequestMapping(value="/toAddOaJhm.do")
     public ModelAndView oaJhmAddPage(HttpServletRequest req,
 			HttpServletResponse resp) {
 		HttpSession session = req.getSession();
-		ModelAndView model = new ModelAndView("/oa/kf_add");
-		
-		//获取客服信息
+		ModelAndView model = new ModelAndView("/oa/jhm_add");
+		//获取登录用户信息
     	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 		if (null != _loginUser) {
-			// 客服类型
-			List<MukeCourseType> courseTypeList = courseService.findAllCourseType();
-			model.addObject("courseTypeList", courseTypeList);
+			// 登录用户
 			model.addObject("loginUser",_loginUser);
-			logger.info("courseTypeList.size:"+courseTypeList.size());
 		}
         return model;
     }
 	
 	
 	/**
-	 * 客服添加
+	 * 激活码添加
 	 * @return
 	 */
 	@RequestMapping(value = "/doAddOaJhm.do", method = RequestMethod.POST)
-	public ResponseEntity<String> oaJhmAdd(
-			@RequestParam(value = "typeId", required = false, defaultValue = "0") Integer typeId,
-			@RequestParam(value = "img", required = false, defaultValue = "") String img,
-			@RequestParam(value = "info", required = false, defaultValue = "") String info,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "title", required = false, defaultValue = "") String title,
+	public ResponseEntity<String> doAddOaJhm(
+			@RequestParam(value = "buyDate", required = false, defaultValue = "") String buyDate,
+			@RequestParam(value = "packDate", required = false, defaultValue = "") String packDate,
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "sliverCard", required = false, defaultValue = "") String sliverCard,
+			@RequestParam(value = "username", required = false, defaultValue = "") String username,
+			
+			@RequestParam(value = "terminalId", required = false, defaultValue = "") String terminalId,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
+			@RequestParam(value = "deliverCode", required = false, defaultValue = "") String deliverCode,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
+			@RequestParam(value = "amount", required = false, defaultValue = "") double amount,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
+			
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服添加!");
+		logger.info("controller:..激活码添加!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -554,36 +540,38 @@ public class OaController {
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 
-				//new course
-				MukeCourse course = new MukeCourse();
+				//new giffgaff
+				TOaGiffgaff giffgaff = new TOaGiffgaff();
 				
-				// get|new role
-				//SysGroup group = groupService.findSysGroup(suGroupId);
-				course.setCreateTime(TimeUtil.now());
-				course.setImg(img);
-				course.setInfo(info);
-				course.setName(name);
-				course.setTitle(title);
-				course.setTypeId(typeId);
-				course.setUid(_loginUser.getId());
-				course.setStatus(Constants.COURSE_STATUS_INIT);//状态 0待审核  1已审核  2 已下线 ;默认为0
-								
-				int result = courseService.addCourse(course);
+				giffgaff.setAmount(amount);
+				giffgaff.setBuyDate(buyDate==null?"":buyDate.replaceAll("-", ""));
+				giffgaff.setDeliverCode(deliverCode);//快递单
+				giffgaff.setMasterCard(masterCard);//激活码
+				giffgaff.setPackDate(packDate==null?"":packDate.replaceAll("-", ""));
+				giffgaff.setRemark(remark);
+				giffgaff.setSliverCard(sliverCard);
+				giffgaff.setTaobaoId(taobaoId);
+				giffgaff.setTerminalId(terminalId);
+				giffgaff.setUsername(username);
+				giffgaff.setWeixinCode(weixinCode);
+				giffgaff.setOperateId(_loginUser.getId());
+				
+				int result = oaService.addOaGiffgaff(giffgaff);
 				if(result > 0){
-					msg="客服添加成功!";
+					msg="0";
 				}else{
-					msg="客服添加失败!";
+					msg="0002";
 				}
 			
 			}
 		}catch(Exception e){
-			logger.error("controller:客服添加异常!"+name,e);
-			msg="客服添加出现异常";
+			logger.error("controller:激活码添加异常!"+username+"--"+masterCard,e);
+			msg="激活码添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
 		}
-		logger.info("controller:客服添加结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:激活码添加结束!");
+		return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -706,20 +694,6 @@ public class OaController {
 			}else{
 				msg="用户未登录!";
 			}
-			
-//			SysUser sUser 
-//			= userService.findSysUser(uid);
-//			
-//			// get|new role
-//			SysRole role = roleService.findSysRole(suRoleId);
-//			
-//			sUser.setStatus(status);//默认失效
-//			sUser.getRoleList().add(null);//添加关联关系
-//			
-//			//role.getUserList().add(sUser);//添加关联关系
-//			
-//			userService.editSysUser(sUser);//删除是逻辑删除，仅仅是失效，客服;
-			
 		}catch(Exception e){
 			logger.error("controller:客服删除异常!"+id,e);
 			msg="客服删除出现异常";
@@ -764,6 +738,178 @@ public class OaController {
 		}
         return model;
 	}
+	
+	
+	
+	
+	
+	/**********扩展页面***********/
+	/**
+	 * 跳转a卡记录管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/oaacardmanage.do")
+	public ModelAndView oaAcardManagePage(
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
+		// 获取激活码以及等级
+		if (null == pageNo) {
+			pageNo = initPageNo;
+		}
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/acard_manage");
+		model.addObject("masterCard", masterCard);
+		masterCard = "A卡记录";
+		
+		model.addObject("pageSize", pageSize);
+		model.addObject("page", page);
+		
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		
+		model.addObject("masterCard", masterCard);
+		
+		return model;
+	}
+	/**
+	 * 跳转b卡记录管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/oabcardmanage.do")
+	public ModelAndView oaBcardManagePage(
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
+		// 获取激活码以及等级
+		if (null == pageNo) {
+			pageNo = initPageNo;
+		}
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/bcard_manage");
+		model.addObject("masterCard", masterCard);
+		masterCard = "B卡记录";
+		
+		model.addObject("pageSize", pageSize);
+		model.addObject("page", page);
+		
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		
+		model.addObject("masterCard", masterCard);
+		
+		return model;
+	}
+	/**
+	 * 跳转c卡记录管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/oaccardmanage.do")
+	public ModelAndView oaCcardManagePage(
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
+		// 获取激活码以及等级
+		if (null == pageNo) {
+			pageNo = initPageNo;
+		}
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/ccard_manage");
+		model.addObject("masterCard", masterCard);
+		masterCard = "C卡记录";
+		
+		model.addObject("pageSize", pageSize);
+		model.addObject("page", page);
+		
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		
+		model.addObject("masterCard", masterCard);
+		
+		return model;
+	}
+	/**
+	 * 跳转d卡记录管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/oadcardmanage.do")
+	public ModelAndView oaDcardManagePage(
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
+		// 获取激活码以及等级
+		if (null == pageNo) {
+			pageNo = initPageNo;
+		}
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/dcard_manage");
+		model.addObject("masterCard", masterCard);
+		masterCard = "D卡记录";
+		
+		model.addObject("pageSize", pageSize);
+		model.addObject("page", page);
+		
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		
+		model.addObject("masterCard", masterCard);
+		
+		return model;
+	}
+	/**
+	 * 跳转e卡记录管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/oaecardmanage.do")
+	public ModelAndView oaEcardManagePage(
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
+		// 获取激活码以及等级
+		if (null == pageNo) {
+			pageNo = initPageNo;
+		}
+		// 返回激活码列表页
+		ModelAndView model = new ModelAndView("/oa/ecard_manage");
+		model.addObject("masterCard", masterCard);
+		masterCard = "E卡记录";
+		
+		model.addObject("pageSize", pageSize);
+		model.addObject("page", page);
+		
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		
+		model.addObject("masterCard", masterCard);
+		
+		return model;
+	}
+	
 	
 	public int getPageSize() {
 		return pageSize;

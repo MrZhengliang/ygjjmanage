@@ -9,15 +9,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sh.manage.dao.CourseDao;
+import com.sh.manage.dao.OaJhmDao;
 import com.sh.manage.dao.OaKfDao;
-import com.sh.manage.dao.SysUserDao;
-import com.sh.manage.entity.MukeCourse;
-import com.sh.manage.entity.MukeCourseType;
+import com.sh.manage.entity.TOaGiffgaff;
 import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.exception.SPlatformServiceException;
 import com.sh.manage.module.page.Page;
-import com.sh.manage.pojo.MukeCourseDTO;
+import com.sh.manage.pojo.TOaGiffgaffDTO;
 import com.sh.manage.pojo.TOaSetcarDTO;
 
 /**
@@ -36,11 +34,9 @@ public class OaService extends BaseService {
 	
 	
 	@Autowired
-	private CourseDao courseDao;
-
-	@Autowired
-	private SysUserDao sysUserDao;
-
+	private OaJhmDao oaJhmDao;
+	
+	
 	
 	/**
 	 * 查找订车记录
@@ -119,11 +115,58 @@ public class OaService extends BaseService {
 	}
 	
 	
-//	/**
-//	 * 所有订车记录类型
-//	 * @return
-//	 */
-//	public List<MukeCourseType> findAllCourseType() {
-//		return courseDao.getAllCourseType();
-//	}
+	/**********************************以下是激活码操作***********************/
+	/**
+	 * 激活码记录管理页
+	 * @param name
+	 * @param replaceAll
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public Page findAllTOaGiffgaff(String masterCard,Integer pageNo, int pageSize) {
+		return oaJhmDao.getAllTOaGiffgaff(masterCard, pageNo, pageSize);
+	}
+	/**
+	 * 查找激活码记录其他信息
+	 * @param course
+	 */
+	public TOaGiffgaffDTO findTOaGiffgaffDTO(Integer id)throws SPlatformServiceException {
+		try {
+			List<TOaGiffgaffDTO> giffgaffDTOList = oaJhmDao.findTOaGiffgaffDTO(id);
+			//找到了激活码记录
+			if(null != giffgaffDTOList){
+				return giffgaffDTOList.get(0);
+			}
+			//找不到激活码记录
+			return new TOaGiffgaffDTO();
+		} catch (Exception e) {
+			logger.error("service:查询激活码记录信息出现异常", e);
+			throw new SPlatformServiceException("查询激活码记录信息出现异常");
+		}
+	}
+	
+	/**
+	 * 激活码记录添加
+	 * @param course
+	 */
+	public Integer addOaGiffgaff(TOaGiffgaff oaGiffgaff) {
+		return (Integer) oaJhmDao.save(oaGiffgaff);
+	}
+	
+	
+	/**
+	 * 激活码记录修改
+	 * @param course
+	 */
+	public void editOaGiffgaff(TOaGiffgaff oaGiffgaff) {
+		oaJhmDao.update(oaGiffgaff);
+	}
+	/**
+	 * 激活码记录删除
+	 * @param course
+	 */
+	public void delOaGiffgaff(TOaGiffgaff oaGiffgaff) {
+		oaJhmDao.delete(oaGiffgaff);
+	}
 }

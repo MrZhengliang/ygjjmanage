@@ -74,9 +74,6 @@
 									id="masterCard" name="masterCard" value="${masterCard }"
 								autocomplete="off" />
 							
-							<input type="text" placeholder="微信" class="form-control" 
-									id="weixinCode" name="weixinCode" value="${weixinCode }"
-								autocomplete="off" /> 
 							
 							
 							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
@@ -87,68 +84,7 @@
                 
                 
                         <div class="table-responsive">
-										<table id="sample-table-1"
-											class="table table-striped table-bordered table-hover">
-											<thead>
-												<tr>
-													<th class="center">序号</th>
-													<th>激活码</th>
-													<th>备用卡</th>
-													<th>用户名</th>
-													<th>联系电话</th>
-													<th>淘宝</th>
-													<th>微信</th>
-													<th>快递号</th>
-													<th>购买日期</th>
-													<th>套餐日期</th>
-													<th>备注</th>
-													<th>金额</th>
-													<th>操作员</th>
-													<th>操作</th>
-												</tr>
-											</thead>
-
-											<tbody>
-												<c:forEach items="${giffgaffList}" var="giffgaff"
-													varStatus="status">
-													<tr>
-														<td>${giffgaff.id}</td>
-														<td>${giffgaff.masterCard}</td>
-														<td>${giffgaff.sliverCard}</td>
-														<td>${giffgaff.username}</td>
-														<td>${giffgaff.terminalId}</td>
-														<td>${giffgaff.taobaoId}</td>
-														<td>${giffgaff.weixinCode}</td>
-														<td>${giffgaff.deliverCode}</td>
-														<td>${giffgaff.buyDate}</td>
-														<td>${giffgaff.packDate}</td>
-														<td>${fn:substring(giffgaff.remark,0,6)}...</td>
-														<td>${giffgaff.amount}</td>
-														<td>${giffgaff.operateName}</td>
-
-														<td>													
-														<c:if test="${giffgaff.id > 0}">
-															<a data-toggle="modal" href="#suserEdit"
-															onClick="editSetcar('${giffgaff.id}');"
-															class="btn btn-xs btn-primary"><i class="icon-edit"></i></a>
-															<a data-toggle="modal" href="#suserDel"
-																onClick="delSetcar('${giffgaff.id}');"
-																class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
-														</c:if>
-															
-														</td>
-													</tr>
-												</c:forEach>
-
-												<c:if test="${page.totalRowNum>0}">
-													<c:if test="${page.totalRowNum >= pageSize}">
-														<tr class="page_c">
-															<td colspan="16">${page.display}</td>
-														</tr>
-													</c:if>
-												</c:if>
-											</tbody>
-										</table>
+										${masterCard }
 									</div>
 									<!-- /.table-responsive -->
 								<!-- /row -->

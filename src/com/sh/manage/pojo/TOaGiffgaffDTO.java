@@ -1,23 +1,15 @@
-package com.sh.manage.entity;
+package com.sh.manage.pojo;
 
 // default package
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
 
 
 /**
  * TOaGiffgaff entity. @author MyEclipse Persistence Tools
  */
-@Entity
-@Table(name="t_oa_giffgaff"
-    ,catalog="ygjj"
-)
 
-public class TOaGiffgaff  implements java.io.Serializable {
+public class TOaGiffgaffDTO  implements java.io.Serializable {
 
 
     // Fields    
@@ -42,20 +34,19 @@ public class TOaGiffgaff  implements java.io.Serializable {
      private String remark;
      private Integer operateId;
 
-
+     private String operateName;
     // Constructors
 
     /** default constructor */
-    public TOaGiffgaff() {
+    public TOaGiffgaffDTO() {
     }
 
     
     /** full constructor */
-    public TOaGiffgaff(String buyDate, String packDate, String masterCard,String sliverCard, String username, String terminalId, Integer usetimeLimit, double amount, String taobaoId, String weixinNickname, String weixinCode, String deliverCode, String remark, Integer operateId) {
+    public TOaGiffgaffDTO(String buyDate, String packDate, String masterCard, String username, String terminalId, Integer usetimeLimit, double amount, String taobaoId, String weixinNickname, String weixinCode, String deliverCode, String remark, Integer operateId) {
         this.buyDate = buyDate;
         this.packDate = packDate;
         this.masterCard = masterCard;
-        this.sliverCard = sliverCard;
         this.username = username;
         this.terminalId = terminalId;
         this.usetimeLimit = usetimeLimit;
@@ -70,9 +61,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
 
    
     // Property accessors
-    @Id @GeneratedValue
-    
-    @Column(name="id", unique=true, nullable=false)
 
     public Integer getId() {
         return this.id;
@@ -82,7 +70,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.id = id;
     }
     
-    @Column(name="buy_date", length=18)
 
     public String getBuyDate() {
         return this.buyDate;
@@ -92,7 +79,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.buyDate = buyDate;
     }
     
-    @Column(name="pack_date", length=100)
 
     public String getPackDate() {
         return this.packDate;
@@ -102,7 +88,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.packDate = packDate;
     }
     
-    @Column(name="master_card", length=50)
 
     public String getMasterCard() {
         return this.masterCard;
@@ -112,19 +97,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.masterCard = masterCard;
     }
     
-    
-    @Column(name="sliver_card", length=50)
-    public String getSliverCard() {
-		return sliverCard;
-	}
-
-
-	public void setSliverCard(String sliverCard) {
-		this.sliverCard = sliverCard;
-	}
-
-
-	@Column(name="username", length=50)
 
     public String getUsername() {
         return this.username;
@@ -134,7 +106,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.username = username;
     }
     
-    @Column(name="terminal_id", length=11)
 
     public String getTerminalId() {
         return this.terminalId;
@@ -144,7 +115,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.terminalId = terminalId;
     }
     
-    @Column(name="usetime_limit")
 
     public Integer getUsetimeLimit() {
         return this.usetimeLimit;
@@ -154,7 +124,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.usetimeLimit = usetimeLimit;
     }
     
-    @Column(name="amount", precision=8)
 
     public double getAmount() {
         return this.amount;
@@ -164,7 +133,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.amount = amount;
     }
     
-    @Column(name="taobao_id", length=40)
 
     public String getTaobaoId() {
         return this.taobaoId;
@@ -174,7 +142,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.taobaoId = taobaoId;
     }
     
-    @Column(name="weixin_nickname", length=40)
 
     public String getWeixinNickname() {
         return this.weixinNickname;
@@ -184,7 +151,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.weixinNickname = weixinNickname;
     }
     
-    @Column(name="weixin_code", length=40)
 
     public String getWeixinCode() {
         return this.weixinCode;
@@ -194,7 +160,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.weixinCode = weixinCode;
     }
     
-    @Column(name="deliver_code", length=25)
 
     public String getDeliverCode() {
         return this.deliverCode;
@@ -204,7 +169,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.deliverCode = deliverCode;
     }
     
-    @Column(name="remark", length=65535)
 
     public String getRemark() {
         return this.remark;
@@ -214,7 +178,6 @@ public class TOaGiffgaff  implements java.io.Serializable {
         this.remark = remark;
     }
     
-    @Column(name="operate_id")
 
     public Integer getOperateId() {
         return this.operateId;
@@ -223,13 +186,21 @@ public class TOaGiffgaff  implements java.io.Serializable {
     public void setOperateId(Integer operateId) {
         this.operateId = operateId;
     }
-   
+
+	public String getOperateName() {
+		return operateName;
+	}
+
+	public void setOperateName(String operateName) {
+		this.operateName = operateName;
+	}
+	
+	public String getSliverCard() {
+		return sliverCard;
+	}
 
 
-
-
-
-
-
-
+	public void setSliverCard(String sliverCard) {
+		this.sliverCard = sliverCard;
+	}
 }
