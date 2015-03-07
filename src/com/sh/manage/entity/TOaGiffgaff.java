@@ -14,7 +14,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="t_oa_giffgaff"
-    ,catalog="ygjj"
 )
 
 public class TOaGiffgaff  implements java.io.Serializable {

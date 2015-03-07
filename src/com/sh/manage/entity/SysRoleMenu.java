@@ -19,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name = "T_SYS_ROLE_MENU", schema = "YGJJ")
+@Table(name = "t_sys_role_menu")
 public class SysRoleMenu implements Serializable {
 
 

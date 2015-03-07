@@ -2,7 +2,6 @@ package com.sh.manage.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name = "T_SYS_MENU", schema = "YGJJ")
+@Table(name = "t_sys_menu")
 public class SysMenu implements Serializable {
 
 	/**

@@ -2,7 +2,6 @@ package com.sh.manage.entity;
 
 // default package
 
-import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +15,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="t_oa_setcar"
-    ,catalog="ygjj"
 )
 
 public class TOaSetcar  implements java.io.Serializable {
