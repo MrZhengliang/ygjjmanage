@@ -46,7 +46,7 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 	 * @param uid
 	 * @return
 	 */
-	public List<TOaGiffgaff> findTOaSetcar(Integer id) {
+	public List<TOaGiffgaff> findTOaGiffgaff(Integer id) {
 		String hql = "from TOaGiffgaff where id = ";
 		hql += id;
 		return this.find(hql);

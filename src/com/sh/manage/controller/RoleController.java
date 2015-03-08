@@ -342,6 +342,7 @@ public class RoleController {
 	 * @param roleMenuStr
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/doEditRole.do", method = RequestMethod.POST)
 	public ResponseEntity<String> doEditRole(HttpServletRequest request,
 			HttpServletResponse resp,

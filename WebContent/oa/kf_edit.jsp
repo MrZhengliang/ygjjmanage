@@ -5,116 +5,136 @@
 
 <!-- include HEAD -->
 <!-- BEGIN HEAD -->
-<%@ include file="../main/header.jsp" %>
+<%@ include file="../main/header.jsp"%>
 <style type="text/css">
-	.form-control{
-		background-color: #fff;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	    color: #555;
-	    font-size: 14px;
-	    height: 34px;
-	    line-height: 1.42857;
-	    padding: 6px 12px;
-	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-	    vertical-align: middle;
-	    display: inline;
-	    width:15%;
+	.role—area{
+		border:1px solid #9FA0A3;
+		line-height: 40px;
+		background-color: #ffffff;
 	}
-	.mr0{
-		margin: 0px 0px 0px 0px;
+	div.left {
+	    float: left;
+	    width: 250px;
 	}
-	
-	.memlist{ list-style:none; margin:7px 0 25px; padding-top:2px; }
-	.memlist li{width: 30%; clear:both; overflow:hidden; zoom:1; *padding:1px 0 5px; line-height:160%;border-bottom: 1px dotted #999;}
-	.memlist label{ float:left; width:120px; }
-	.fixwidth{ width: 90%; }
-	.display_none{display: none;}
-	.col-lg-12{margin: 20px 0 0 10px;}
+	div.zTreeDemoBackground {
+	    text-align: left;
+	    width: 250px;
+	}
+	#wrap ul{
+		text-align: left;
+	}
+	.wrap-ul li{
+		display:block;
+	    float:left;
+	    width:110px;
+	}
+	#wrap ul .wrap-li{
+		transition-property: transform, opacity;
+		transition-duration: 0.4s;
+	}
+	.box_l_h_c li{
+	    display:block;
+	    float:left;
+	    margin:15px 0 0 10px;
+	}
+	.display_none{
+		display: none;
+	}
+	.fl{
+		float: left;
+	}
+	.upload_div{
+		
+	}
+	#pic_list li{
+		margin:0;
+	}
 </style>
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
-<body class="padTop53 " >
-
-        
-	<div id="wrap">
-        <%@ include file="../main/top.jsp" %>
-        <!-- END HEADER SECTION -->
-
-
-
-        <%@ include file="../main/left.jsp" %>
-        <!--END MENU SECTION -->
-
-<!--PAGE CONTENT -->
+<body >
         <div id="content">
             <div class="inner" style="min-height:1200px;">
                 <div class="row">
                     <div class="col-lg-12">
-	                        <h5>课程管理-课程编辑</h5>
+	                        <h5>客服管理-订车记录编辑</h5>
 	                </div>
 	            </div>
 	            <hr />
 	            <div class="">
 	            	<!-- 信息显示 -->
-	            	<form action="" name="addForm">
-		            	<ul class="memlist fixwidth">
-		            		<li><label>课程ID：</label> ${course.id }</li>
-		            		<li><label>课程名：</label> ${course.name }</li>
-		            		<li><label>课程类型：</label> ${course.cTypeName }</li>
-		            		<li><label>课程简介：</label> ${course.info }</li>
-		            		
-		            		<li><label>添加人：</label> ${course.userName }</li>
-		            		<li><label>添加时间：</label> ${course.createTime }</li>
-		            		<!-- <li><label>头像预览：</label>
-		            			<input type="file" name="picpath" style="display:none;width:0px;">
-								<input type="button" value="上传照片" class="btn btn-primary btn-sm" onclick="document.addForm.spanButtonPlaceHolder.click()">
-								<div id="img-priview">
-									<img alt="" src="" id="userPic">
-								</div>
-		            		</li> -->
-		            		<li>
-		            			<div id="upload_preview" class="upload_div">
-									<label>截图预览：</label>
-									<div id="divFileProgressContainer">
-										<ul id="pic_list" style="margin: 5px;">
-											<c:choose>
-												<c:when test="${course.videoId > 0}">
-													<img id="pic_img" width="64" height="64" src="${attachment.filepath }"></img>
-												</c:when>
-												<c:otherwise>
-													<img id="pic_img" width="64" height="64" src="<%=path %>/static/images/default.jpg"></img>
-												</c:otherwise>
-											</c:choose>											
-										</ul>
-										<div style="clear: both;"></div>
-									</div>
-									<!-- 需要js控制展示 -->
-									<!--div id="prev_64740" class="prev_a left labelC" draggable="true" mid="64740">
-										<div class="width100 labelC">
-											<img class="prev" alt="" src="http://img5.bcyimg.com/party/expo/picture/f/541adae567533.png/w230" onload="updateH()">
-										</div>
-										<a href="javascript:void(0)" onclick="delOneTmpPic('#gfs_pic_ids','64740')">删除该图片</a>
-									</div-->
-								</div>
-
-								<div class="upload_tag">
-									<label class="left mgr5" for="etime">上传视频</label>
-									<div id="pic_upload" class="upload_btn_cs">
-										<div id="pic_upload_button" class="upload_Button">
-											<span name="spanButtonPlaceHolder" id="spanButtonPlaceHolder">X</span>
-										</div>
-										<input id="btnCancel" type="button" value=""
-											onclick="cancelUpload();" disabled="disabled" class="display_none"/>
-									</div>
-
-									<input type="hidden" name="faceImg" id="faceImg" value=""/>
-								</div>
-		            		</li>
-		            	</ul>
-		            	
+	            	<form class="" method="post" id="editForm" name="editForm"
+						action="<spring:url value='/doEditOaKf.do' htmlEscape='true'/>" target="_self">
+						<input type="hidden" name="uid" value="${loginUser.id}">
+		            	<input type="hidden" id="parentId" name="parentId" value="${parentId }" />
+		            	<input type="hidden" id="ownId" name="ownId" value="${ownId }" />
+		            	<input type="hidden" id="carId" name="carId"/>
+		            	<ul class="box_l_h_c">
+							<li class="box_l_h_c_li">
+								接送类型:<select id="useType" name="useType" class="form-control"
+									style="height:33px;width: 195px; background: none repeat scroll 0 0 #f5f5f5 !important;">
+										<option value="0">请选择接送类型</option>
+										<option value="1" <c:if test="${car.useType==1 }">selected</c:if>>接</option>
+										<option value="2" <c:if test="${car.useType==2 }">selected</c:if>>送</option>
+										<option value="3" <c:if test="${car.useType==3 }">selected</c:if>>旅游</option>
+										<option value="4" <c:if test="${car.useType==4 }">selected</c:if>>包车</option>
+								</select>
+							</li>
+							<li class="box_l_h_c_li">
+								接送日期:<input id="usecarDate" class="form-control span3" type="text"
+									name="usecarDate" value="${car.usecarDate }" placeholder="接送日期" readonly>
+							</li>
+							<li class="box_l_h_c_li">
+								航班:<input name="flightNumber" type="text" value="${car.flightNumber }"
+									placeholder="航班" class="form-control span3" id="flightNumber"
+									autocomplete="off" />
+								</li>
+							<li class="box_l_h_c_li">
+								姓名:<input name="customerName" id="customerName" type="text"
+									placeholder="姓名" class="form-control span3" value="${car.customerName }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								人数:<input name="peopleNumber" id="peopleNumber" type="text"
+									placeholder="人数" class="form-control span3" value="${car.peopleNumber }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								联系电话:<input name="telephone" id="telephone" type="text"
+									placeholder="联系电话" class="form-control span3" value="${car.telephone }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								淘宝:<input name="taobaoId" id="taobaoId" type="text"
+									placeholder="淘宝" class="form-control span3" value="${car.taobaoId }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								微信:<input name="weixinCode" id="weixinCode" type="text"
+									placeholder="微信" class="form-control span3" value="${car.weixinCode }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								QQ:<input name="qqCode" id="qqCode" type="text"
+									placeholder="QQ" class="form-control span3" value="${car.qqCode }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								接机人:<input name="pickPeople" id="pickPeople" type="text"
+									placeholder="接机人" class="form-control span3" value="${car.pickPeople }"
+									autocomplete="off" />
+							</li>
+							<li class="box_l_h_c_li">
+								会员号:<input name="memCode" id="memCode" type="text"
+									placeholder="会员号" class="form-control span3" value="${car.memCode }"
+									autocomplete="off" />
+							</li>
+							
+							<li class="box_l_h_c_li">
+								备注:<textarea rows="4" cols="50" name="remark" placeholder="输入备注信息,5000字以内" class="form-control">${car.remark }</textarea>
+							</li>
+						</ul>
 	            	</form>
 	            </div>			
                  <!-- /row -->
@@ -139,90 +159,11 @@
 	<script src="<%=path %>/static/js/zdialog/zDrag.js"></script>
        
     <script type="text/javascript"	src="<%=path %>/static/js/date-time/bootstrap-datepicker.js"></script>
-    
-    
-    
+    <script type="text/javascript">
+				$('#usecarDate').datepicker({format:"yyyy-mm-dd"});
+				//提交搜索
+	</script> 
 </body>
     <!-- END BODY -->
-    	
-    	<script src="<%=path %>/static/js/swfupload/js/fileprogress.js" type="text/javascript"></script>
-		<script src="<%=path %>/static/js/swfupload/js/handlers.js" type="text/javascript"></script>
-		<script src="<%=path %>/static/js/swfupload/js/swfupload.queue.js" type="text/javascript"></script>
-		<script src="<%=path %>/static/js/swfupload/swfupload/swfupload.js" type="text/javascript"></script>
-    	<script type="text/javascript" >
-	    	var swfu;
-	
-			window.onload = function() {
-				var settings = {
-					flash_url : "<%=path %>/static/js/swfupload/swfupload/swfupload.swf",
-					upload_url: "<%=path%>/uploadImg.do",	// Relative to the SWF file
-					post_params: {"jsessionid":"<%=request.getSession().getId()%>","courseId" : "${course.id}"},
-					file_size_limit : "100 MB",
-					file_types : "*.*",
-					file_types_description : "All Files",
-					file_upload_limit : 100,
-					file_queue_limit : 0,
-					custom_settings : {
-						progressTarget : "fsUploadProgress",
-						cancelButtonId : "btnCancel"
-					},
-					debug: false,
-	
-					// Button settings
-					button_image_url: "<%=path %>/static/js/swfupload/images/TestImageNoText_65x29-2.png",	// Relative to the Flash file
-					button_width: "65",
-					button_height: "29",
-					button_placeholder_id: "spanButtonPlaceHolder",
-					button_text: '<span class="btn btn-primary btn-sm theFont">选择图片</span>',
-					button_text_style: ".theFont { font-size: 13; }",
-					button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-					button_cursor: SWFUpload.CURSOR.HAND,
-					button_text_left_padding: 3,
-					button_text_top_padding: 3,
-	
-					// The event handler functions are defined in handlers.js
-					file_queued_handler : fileQueued,
-					file_queue_error_handler : fileQueueError,
-					file_dialog_complete_handler : fileDialogComplete,
-					upload_start_handler : uploadStart,
-					upload_progress_handler : uploadProgress,
-					upload_error_handler : uploadError,
-					upload_success_handler : uploadSuccess,
-					upload_complete_handler : uploadComplete,
-					queue_complete_handler : queueComplete	// Queue plugin event
-				};
-	
-				swfu = new SWFUpload(settings);
-		     };
-	
-		//预览区域设置
-		function fileQueued(){
-				swfu.startUpload();
-		}
-		//上传完成
-		function uploadSuccess(file, serverData){
-			addImage(serverData);
-		}
-		//添加图片
-		function addImage(serverData){
-	
-			var result = new Array();
-	    	result = eval('('+serverData+')');//序列化的json对象
-			//alert(result.response);
-			//alert(result.aid);
-			//var newElement = "图片预览：<br><div style='width:172px;height:225px'><img src=\""+APP+"/"+data.savepath+data['savename']+"\" width=172 height=225/>"+data['savename']+"</div>";
-			//alert('<{$aid}>');
-			//$("#pic_list").empty();
-			//$("#pic_list").append(result.newFileUrl);
-			$("#pic_img").empty();
-			$("#pic_img").attr("src",result.newFileUrl);
-			$("#faceImg").val(result.aid);
-			$('.left .mgr5').html('重新上传图片');
-			
-			$("#l_face_img").empty();
-			$("#l_face_img").attr("src",result.newFileUrl);
-			//$("img.button").last().bind("click", del);
-		}
-    	</script>
 <iframe style="display: none" name="thisFrame"></iframe>
 </html>

@@ -18,16 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sh.manage.constants.Constants;
 import com.sh.manage.constants.SessionConstants;
-import com.sh.manage.entity.MukeCourse;
-import com.sh.manage.entity.MukeCourseType;
-import com.sh.manage.entity.SysAttachment;
 import com.sh.manage.entity.TOaGiffgaff;
 import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.module.page.Page;
 import com.sh.manage.pojo.LoginUser;
-import com.sh.manage.pojo.MukeCourseDTO;
+import com.sh.manage.pojo.TOaGiffgaffDTO;
+import com.sh.manage.pojo.TOaSetcarDTO;
 import com.sh.manage.service.CourseService;
 import com.sh.manage.service.OaService;
 import com.sh.manage.service.UploadService;
@@ -193,7 +190,6 @@ public class OaController {
         return model;
     }
 	
-	
 	/**
 	 * 客服订车记录添加
 	 * @return
@@ -233,7 +229,7 @@ public class OaController {
 				TOaSetcar car = new TOaSetcar();
 				
 				car.setUseType(useType);//类型
-				car.setTargetDate(TimeUtil.now());//咨询日期，预定日
+				car.setTargetDate(TimeUtil.nowDate());//咨询日期，预定日
 				car.setOperateId(_loginUser.getId());//操作员id
 				car.setCustomerName(customerName);//姓名
 				car.setFlightNumber(flightNumber);//航班
@@ -271,33 +267,25 @@ public class OaController {
 	 * 订车记录编辑页面
 	 * @return
 	 */
-	@RequestMapping(value = "/toEditOaKf.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/toEditOaKf.do", method = RequestMethod.GET)
 	public ModelAndView oaKfEditPage(
-			@RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
+			@RequestParam(value = "carId", required = false, defaultValue = "") Integer carId,
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response) {
-		logger.info("controller:..客服编辑页面!");
-		ModelAndView model = new ModelAndView("/course/course_edit");
+		logger.info("controller:..订车记录编辑页面!");
+		ModelAndView model = new ModelAndView("/oa/kf_edit");
 		HttpSession session = request.getSession();
 		try{
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 				//get/new course
-				MukeCourseDTO course = courseService.findCourseDTO(courseId);
-				if(null!= course.getVideoId() && course.getVideoId() > 0){
-					SysAttachment sysAttachment = new SysAttachment();
-					sysAttachment.setAid(course.getVideoId());//附件id
-					sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
-					SysAttachment attachment = uploadService.getFile(sysAttachment);
-					model.addObject("attachment", attachment);
-				}
-				model.addObject("course", course);
-				
+				TOaSetcarDTO car = oaService.findTOaSetcarDTO(carId);
+				model.addObject("car", car);
 			}
 		}catch(Exception e){
-			logger.error("controller:客服编辑页面异常!"+courseId,e);
+			logger.error("controller:订车记录编辑页面异常!"+carId,e);
 		}
 		model.addObject("parentId", parentId);
 		model.addObject("ownId", ownId);
@@ -310,13 +298,23 @@ public class OaController {
 	 */
 	@RequestMapping(value = "/doEditOaKf.do", method = RequestMethod.POST)
 	public ResponseEntity<String> doEditOaKf(
-			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
-			@RequestParam(value = "typeId", required = false, defaultValue = "0") Integer typeId,
-			@RequestParam(value = "img", required = false, defaultValue = "") String img,
-			@RequestParam(value = "info", required = false, defaultValue = "") String info,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "title", required = false, defaultValue = "") String title,
+			@RequestParam(value = "sendDate", required = false, defaultValue = "") String sendDate,
+			@RequestParam(value = "usecarDate", required = false, defaultValue = "") String usecarDate,
+			@RequestParam(value = "useType", required = false, defaultValue = "") Integer useType,
+			@RequestParam(value = "flightNumber", required = false, defaultValue = "") String flightNumber,
+			@RequestParam(value = "customerName", required = false, defaultValue = "") String customerName,
+			@RequestParam(value = "peopleNumber", required = false, defaultValue = "") Integer peopleNumber,
+			@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
+			@RequestParam(value = "qqCode", required = false, defaultValue = "") String qqCode,
+			@RequestParam(value = "pickPeople", required = false, defaultValue = "") String pickPeople,
+			@RequestParam(value = "memCode", required = false, defaultValue = "") String memCode,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
+			@RequestParam(value = "carId", required = false, defaultValue = "") Integer carId,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
 		logger.info("controller:..订车记录修改!");
@@ -331,29 +329,39 @@ public class OaController {
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
-				//get/new course
-				MukeCourse course = courseService.findCourse(id);
-				course.setImg(img);
-				course.setInfo(info);
-				course.setName(name);
-				course.setTitle(title);
-				course.setTypeId(typeId);
-				course.setUid(_loginUser.getId());
+				//get/new car
+				TOaSetcar car = oaService.findSetcar(carId);
 				
-				courseService.editCourse(course);
+				car.setUseType(useType);//类型
+				car.setTargetDate(TimeUtil.now());//咨询日期，预定日
+				car.setOperateId(_loginUser.getId());//操作员id
+				car.setCustomerName(customerName);//姓名
+				car.setFlightNumber(flightNumber);//航班
+				car.setMemCode(memCode);//会员号
+				car.setTaobaoId(taobaoId);//淘宝
+				car.setWeixinCode(weixinCode);//微信
+				car.setQqCode(qqCode);//QQ
+				car.setUsecarDate(usecarDate.replaceAll("-", ""));//接送日期
+				car.setTelephone(telephone);//联系电话
+				car.setPeopleNumber(peopleNumber);
+				car.setPickPeople(pickPeople);
+				car.setRemark(remark);
+				car.setSendDate(sendDate);
+				
+				oaService.editOaSetcar(car);
 				msg="订车记录修改成功!";
 			}else{
 				msg="用户未登录!";
 			}
 		}catch(Exception e){
-			logger.error("controller:订车记录修改异常!"+name,e);
+			logger.error("controller:订车记录修改异常!"+carId,e);
 			msg="订车记录修改出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 			
 		}
 		logger.info("controller:订车记录修改结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	/**
 	 * 订车记录删除
@@ -361,8 +369,9 @@ public class OaController {
 	 */
 	@RequestMapping(value = "/doDeloaKf.do", method = RequestMethod.POST)
 	public ResponseEntity<String> doDeloaKf(
-			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
-			@RequestParam(value = "status", required = false, defaultValue = "9") Integer status,
+			@RequestParam(value = "carId", required = false, defaultValue = "") Integer carId,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
 		logger.info("controller:..订车记录删除!");
@@ -378,24 +387,24 @@ public class OaController {
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
-				//get/new course
-				MukeCourse course = courseService.findCourse(id);
+				//get/new car
+				TOaSetcar car = oaService.findSetcar(carId);
 				
-				courseService.delCourse(course);
-				msg="客服删除成功!";
+				oaService.delOaSetcar(car);
+				msg="订车记录删除成功!";
 			}else{
 				msg="用户未登录!";
 			}
 			
 		}catch(Exception e){
-			logger.error("controller:客服删除异常!"+id,e);
-			msg="客服删除出现异常";
+			logger.error("controller:订车记录删除异常!"+carId,e);
+			msg="订车记录删除出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 			
 		}
-		logger.info("controller:客服删除结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:订车记录删除结束!");
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -417,14 +426,14 @@ public class OaController {
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 				//get/new course
-				MukeCourse course = courseService.findCourse(id);
-				
-				SysAttachment sysAttachment = new SysAttachment();
-				sysAttachment.setAid(course.getVideoId());//附件id
-				sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
-				SysAttachment attachment = uploadService.getFile(sysAttachment);
-				model.addObject("attachment", attachment);
-				model.addObject("course", course);
+//				MukeCourse course = courseService.findCourse(id);
+//				
+//				SysAttachment sysAttachment = new SysAttachment();
+//				sysAttachment.setAid(course.getVideoId());//附件id
+//				sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
+//				SysAttachment attachment = uploadService.getFile(sysAttachment);
+//				model.addObject("attachment", attachment);
+//				model.addObject("course", course);
 			}
 		}catch(Exception e){
 			logger.error("controller:客服查看异常!"+id,e);
@@ -529,7 +538,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..激活码添加!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -579,33 +587,27 @@ public class OaController {
 	 * 激活码编辑页面
 	 * @return
 	 */
-	@RequestMapping(value = "/toEditOaJhm.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/toEditOaJhm.do", method = RequestMethod.GET)
 	public ModelAndView oaJhmEditPage(
-			@RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
+			@RequestParam(value = "jhmId", required = false, defaultValue = "") Integer jhmId,
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response) {
-		logger.info("controller:..客服编辑页面!");
-		ModelAndView model = new ModelAndView("/course/course_edit");
+		logger.info("controller:..激活码编辑页面!");
+		ModelAndView model = new ModelAndView("/oa/jhm_edit");
 		HttpSession session = request.getSession();
 		try{
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
-				//get/new course
-				MukeCourseDTO course = courseService.findCourseDTO(courseId);
-				if(null!= course.getVideoId() && course.getVideoId() > 0){
-					SysAttachment sysAttachment = new SysAttachment();
-					sysAttachment.setAid(course.getVideoId());//附件id
-					sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
-					SysAttachment attachment = uploadService.getFile(sysAttachment);
-					model.addObject("attachment", attachment);
-				}
-				model.addObject("course", course);
+				//get/new TOaGiffgaff
+				TOaGiffgaffDTO giffgaff = oaService.findTOaGiffgaffDTO(jhmId);
+				
+				model.addObject("giffgaff", giffgaff);
 				
 			}
 		}catch(Exception e){
-			logger.error("controller:客服编辑页面异常!"+courseId,e);
+			logger.error("controller:激活码编辑页面异常!"+jhmId,e);
 		}
 		model.addObject("parentId", parentId);
 		model.addObject("ownId", ownId);
@@ -618,16 +620,25 @@ public class OaController {
 	 */
 	@RequestMapping(value = "/doEditOaJhm.do", method = RequestMethod.POST)
 	public ResponseEntity<String> oaJhmEdit(
-			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
-			@RequestParam(value = "typeId", required = false, defaultValue = "0") Integer typeId,
-			@RequestParam(value = "img", required = false, defaultValue = "") String img,
-			@RequestParam(value = "info", required = false, defaultValue = "") String info,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "title", required = false, defaultValue = "") String title,
+			@RequestParam(value = "jhmId", required = false, defaultValue = "") Integer jhmId,
+			@RequestParam(value = "buyDate", required = false, defaultValue = "") String buyDate,
+			@RequestParam(value = "packDate", required = false, defaultValue = "") String packDate,
+			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "sliverCard", required = false, defaultValue = "") String sliverCard,
+			@RequestParam(value = "username", required = false, defaultValue = "") String username,
+			
+			@RequestParam(value = "terminalId", required = false, defaultValue = "") String terminalId,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
+			@RequestParam(value = "deliverCode", required = false, defaultValue = "") String deliverCode,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
+			@RequestParam(value = "amount", required = false, defaultValue = "") double amount,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服修改!");
+		logger.info("controller:..激活码修改!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -639,29 +650,36 @@ public class OaController {
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
-				//get/new course
-				MukeCourse course = courseService.findCourse(id);
-				course.setImg(img);
-				course.setInfo(info);
-				course.setName(name);
-				course.setTitle(title);
-				course.setTypeId(typeId);
-				course.setUid(_loginUser.getId());
+				//get/new giffgaff
+				TOaGiffgaff giffgaff = oaService.findGiffgaff(jhmId);
 				
-				courseService.editCourse(course);
-				msg="客服修改成功!";
+				giffgaff.setAmount(amount);
+				giffgaff.setBuyDate(buyDate==null?"":buyDate.replaceAll("-", ""));
+				giffgaff.setDeliverCode(deliverCode);//快递单
+				giffgaff.setMasterCard(masterCard);//激活码
+				giffgaff.setPackDate(packDate==null?"":packDate.replaceAll("-", ""));
+				giffgaff.setRemark(remark);
+				giffgaff.setSliverCard(sliverCard);
+				giffgaff.setTaobaoId(taobaoId);
+				giffgaff.setTerminalId(terminalId);
+				giffgaff.setUsername(username);
+				giffgaff.setWeixinCode(weixinCode);
+				giffgaff.setOperateId(_loginUser.getId());
+				
+				oaService.editOaGiffgaff(giffgaff);
+				msg="激活码修改成功!";
 			}else{
 				msg="用户未登录!";
 			}
 		}catch(Exception e){
-			logger.error("controller:客服修改异常!"+name,e);
-			msg="客服修改出现异常";
+			logger.error("controller:激活码修改异常!"+jhmId,e);
+			msg="激活码修改出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 			
 		}
-		logger.info("controller:客服修改结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:激活码修改结束!");
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	/**
 	 * 激活码删除
@@ -669,11 +687,13 @@ public class OaController {
 	 */
 	@RequestMapping(value = "/oaJhmDel.do", method = RequestMethod.POST)
 	public ResponseEntity<String> oaJhmDel(
-			@RequestParam(value = "id", required = false, defaultValue = "0") Integer id,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			@RequestParam(value = "jhmId", required = false, defaultValue = "") Integer jhmId,
 			@RequestParam(value = "status", required = false, defaultValue = "9") Integer status,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服删除!");
+		logger.info("controller:..激活码删除!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -686,23 +706,23 @@ public class OaController {
 			//获取客服信息
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
-				//get/new course
-				MukeCourse course = courseService.findCourse(id);
+				//get/new giffgaff
+				TOaGiffgaff giffgaff = oaService.findGiffgaff(jhmId);
 				
-				courseService.delCourse(course);
-				msg="客服删除成功!";
+				oaService.delOaGiffgaff(giffgaff);
+				msg="激活码删除成功!";
 			}else{
 				msg="用户未登录!";
 			}
 		}catch(Exception e){
-			logger.error("controller:客服删除异常!"+id,e);
-			msg="客服删除出现异常";
+			logger.error("controller:激活码删除异常!"+jhmId,e);
+			msg="激活码删除出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 			
 		}
-		logger.info("controller:客服删除结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/coursemanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:激活码删除结束!");
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -724,14 +744,14 @@ public class OaController {
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 				//get/new course
-				MukeCourse course = courseService.findCourse(id);
-				
-				SysAttachment sysAttachment = new SysAttachment();
-				sysAttachment.setAid(course.getVideoId());//附件id
-				sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
-				SysAttachment attachment = uploadService.getFile(sysAttachment);
-				model.addObject("attachment", attachment);
-				model.addObject("course", course);
+//				MukeCourse course = courseService.findCourse(id);
+//				
+//				SysAttachment sysAttachment = new SysAttachment();
+//				sysAttachment.setAid(course.getVideoId());//附件id
+//				sysAttachment.setType(Constants.ATTACH_TYPE_VIDEO);//视频类型
+//				SysAttachment attachment = uploadService.getFile(sysAttachment);
+//				model.addObject("attachment", attachment);
+//				model.addObject("course", course);
 			}
 		}catch(Exception e){
 			logger.error("controller:客服查看异常!"+id,e);

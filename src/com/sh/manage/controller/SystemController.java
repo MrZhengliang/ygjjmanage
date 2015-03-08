@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 import com.sh.manage.service.LoginService;
 import com.sh.manage.service.MenuService;
 import com.sh.manage.service.SystemService;
@@ -27,6 +28,7 @@ import com.sh.manage.service.UserService;
 public class SystemController {
 	
 	
+	@SuppressWarnings("unused")
 	private Logger logger = Logger.getLogger(SystemController.class);
 
 	@Autowired

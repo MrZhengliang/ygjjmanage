@@ -58,7 +58,7 @@
 						<input type="hidden" name="uid" value="${loginUser.id}">
 						<ul class="box_l_h_c">
 							<li class="box_l_h_c_li">
-								<select id="useType" name="useType" class="form-control"
+								接送类型:<select id="useType" name="useType" class="form-control"
 									style="height:33px;width: 195px; background: none repeat scroll 0 0 #f5f5f5 !important;">
 										<option value="0" selected>请选择接送类型</option>
 										<option value="1">接</option>
@@ -68,57 +68,57 @@
 								</select>
 							</li>
 							<li class="box_l_h_c_li">
-								<input id="usecarDate" class="form-control span3" type="text"
+								接送日期:<input id="usecarDate" class="form-control span3" type="text"
 									name="usecarDate" value="" placeholder="接送日期" readonly>
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="flightNumber" type="text"
+								航班:<input name="flightNumber" type="text"
 									placeholder="航班" class="form-control span3" id="flightNumber"
 									autocomplete="off" />
 								</li>
 							<li class="box_l_h_c_li">
-								<input name="customerName" id="customerName" type="text"
+								姓名:<input name="customerName" id="customerName" type="text"
 									placeholder="姓名" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="peopleNumber" id="peopleNumber" type="text"
+								人数:<input name="peopleNumber" id="peopleNumber" type="text"
 									placeholder="人数" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="telephone" id="telephone" type="text"
+								联系电话:<input name="telephone" id="telephone" type="text"
 									placeholder="联系电话" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="taobaoId" id="taobaoId" type="text"
+								淘宝:<input name="taobaoId" id="taobaoId" type="text"
 									placeholder="淘宝" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="weixinCode" id="weixinCode" type="text"
+								微信:<input name="weixinCode" id="weixinCode" type="text"
 									placeholder="微信" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="qqCode" id="qqCode" type="text"
+								QQ:<input name="qqCode" id="qqCode" type="text"
 									placeholder="QQ" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="pickPeople" id="pickPeople" type="text"
+								接机人:<input name="pickPeople" id="pickPeople" type="text"
 									placeholder="接机人" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							<li class="box_l_h_c_li">
-								<input name="memCode" id="memCode" type="text"
+								会员号:<input name="memCode" id="memCode" type="text"
 									placeholder="会员号" class="form-control span3" 
 									autocomplete="off" />
 							</li>
 							
 							<li class="box_l_h_c_li">
-								<textarea rows="4" cols="50" name="remark" placeholder="输入备注信息,5000字以内" class="form-control"></textarea>
+								备注:<textarea rows="4" cols="50" name="remark" placeholder="输入备注信息,5000字以内" class="form-control"></textarea>
 							</li>
 						</ul>
 					</form>

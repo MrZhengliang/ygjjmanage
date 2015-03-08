@@ -82,6 +82,10 @@
 							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
 							</button>
+							<div
+								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
+								<a onclick="addJhm();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
+							</div>
 						</form>
 				</div>
                 
@@ -129,10 +133,10 @@
 														<td>													
 														<c:if test="${giffgaff.id > 0}">
 															<a data-toggle="modal" href="#suserEdit"
-															onClick="editSetcar('${giffgaff.id}');"
+															onClick="editJhm('${giffgaff.id}');"
 															class="btn btn-xs btn-primary"><i class="icon-edit"></i></a>
 															<a data-toggle="modal" href="#suserDel"
-																onClick="delSetcar('${giffgaff.id}');"
+																onClick="delJhm('${giffgaff.id}','${giffgaff.username}');"
 																class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 														</c:if>
 															
@@ -152,10 +156,7 @@
 									</div>
 									<!-- /.table-responsive -->
 								<!-- /row -->
-							<div
-								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
-								<a onclick="addSetcar();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
-							</div>
+							
 							<div class="hr hr-18 dotted hr-double"></div>
                     </div>
                 </div>
@@ -190,7 +191,7 @@
     
 
   	//订车记录新增
-    var addSetcar = function(){
+    var addJhm = function(){
     		var diag = new zDialog();
     		diag.Height = 470;
         	diag.Title = "客服管理-激活码新增";
@@ -223,15 +224,33 @@
     
     //在父页面提交iframe中的表单
     //订车记录编辑
-    var editCourse = function(id){
-    	$('#edit-courseId').val(id);
-    	document.getElementById('editForm').submit();
+    var editJhm = function(id){
+    	var diag = new zDialog();
+		diag.Height = 470;
+    	diag.Title = "客服管理-激活码编辑";
+    	diag.URL = "<%=path %>/toEditOaJhm.do?parentId=${parentId}&ownId=${ownId}&jhmId="+id;;
+    	diag.OKEvent = function(){
+    		diag.innerDoc.getElementById("jhmId").value = id;
+    		//提交表单
+    		diag.innerDoc.getElementById('editForm').submit();
+    		diag.submited=true;
+    	};//点击确定后调用的方法
+    	diag.OnLoad=function(){
+    		if(diag.submited){
+    			diag.openerWindow.location.reload();
+                try{
+    				diag.close();
+                }catch(e){}
+    		}
+    	};
+    	diag.CancelEvent = function(){diag.close();};
+    	diag.show();
     }
     
     
     //订车记录删除
-    var delCourse= function(id,name){
-    	$('#del-userId').val(id);
+    var delJhm= function(id,name){
+    	$('#del-jhmId').val(id);
     	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
     		document.getElementById('delForm').submit();diag.close();
     	});
@@ -250,10 +269,10 @@
 				}
 </script>    
 
-<form id="delForm" name="delForm" method="post" action="doDelGroup.do" target="thisFrame">
+<form id="delForm" name="delForm" method="post" action="doDelJhm.do" target="thisFrame">
 	<input type="hidden" id="del-userId" name="userId">
 </form>
-<form id="editForm" name="editForm" method="post" action="toEditCourse.do" target="_self">
+<form id="editForm" name="editForm" method="post" action="toEditJhm.do" target="_self">
 	<input type="hidden" id="edit-courseId" name="courseId">
 	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">
 	<input type="hidden" id="edit-ownId" name="ownId" value="${ownId }">

@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class WeChatController{
 
-	private static final Logger log = Logger.getLogger(WeChatController.class);
+	@SuppressWarnings("unused")
+	private static final Logger logger = Logger.getLogger(WeChatController.class);
 	public final String TOKEN = "ziqiangbuxi";
 	//private final String SUBSCRIBE_EVENT = "subscribe";//订阅事件
 	//private final String MENU_CLICK_EVENT = "CLICK";

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.sh.manage.entity.MukeCourseType;
 import com.sh.manage.entity.TOaSetcar;
 import com.sh.manage.module.page.Page;
-import com.sh.manage.pojo.MukeCourseDTO;
 import com.sh.manage.pojo.TOaSetcarDTO;
 
 /**
@@ -128,11 +127,10 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 	@SuppressWarnings("unchecked")
 	public List<TOaSetcarDTO> findTOaSetcarDTO(Integer id) {
 		StringBuffer sbf = new StringBuffer();
-		sbf.append("select rt.* from (select s.id,s.create_time createTime,s.img,s.info,s.title,s.name,s.type_id typeId,s.sys_user_id uid,s.video_id videoId,s.status,u.name userName,t.name cTypeName from muke_course s join t_sys_user u on s.sys_user_id=u.uid left join muke_course_type t on s.type_id = t.id ");
+		sbf.append("select rt.* from (select s.id,s.target_date targetDate,s.usecar_date usecarDate,s.flight_number flightNumber ,s.use_type useType,s.customer_name customerName,"
+				+ "s.people_number peopleNumber,s.telephone,s.taobao_id taobaoId,s.weixin_code weixinCode,s.qq_code qqCode,s.pick_people pickPeople,u.name operateName from t_oa_setcar s join t_sys_user u on s.operate_id=u.uid  ");
 		sbf.append(" where 1 = 1 ");//有效的用户and s.status = 1
-		
-//		sbf.append("select rt.* from (select s.*,u.*,t.* from muke_course s join t_sys_user u on s.sys_user_id=u.uid left join muke_course_type t on s.type_id = t.id ");
-//		sbf.append(" where 1 = 1 ");//有效的用户and s.status = 1
+
 		Object[] params = new Object[]{};
 		
 		if(id > 0){

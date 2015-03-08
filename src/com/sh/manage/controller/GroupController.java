@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sh.manage.constants.SessionConstants;
 import com.sh.manage.entity.SysGroup;
-import com.sh.manage.entity.SysMenu;
 import com.sh.manage.entity.SysRole;
 import com.sh.manage.exception.SPlatformServiceException;
 import com.sh.manage.module.page.Page;

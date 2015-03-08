@@ -38,7 +38,7 @@ public class TOaSetcarDTO  implements java.io.Serializable {
      private String sendDate;
      private String remark;
      private Integer operateId;
-
+     private String memCode;
      /**
       * 操作员名称
       */
@@ -50,7 +50,17 @@ public class TOaSetcarDTO  implements java.io.Serializable {
     }
 
     
-    /** full constructor */
+    public String getMemCode() {
+		return memCode;
+	}
+
+
+	public void setMemCode(String memCode) {
+		this.memCode = memCode;
+	}
+
+
+	/** full constructor */
     public TOaSetcarDTO(String targetDate, String usecarDate, String flightNumber, Integer useType, String customerName, Integer peopleNumber, String telephone, String destAddress, String taobaoId, String weixinCode, String carType,String pickPeople, double totalPrice, double chinaPay, double ukDriverPay, Integer giffgaff, Integer isSmoke, Integer isSendUk, String sendDate, String remark, Integer operateId) {
         this.targetDate = targetDate;
         this.usecarDate = usecarDate;

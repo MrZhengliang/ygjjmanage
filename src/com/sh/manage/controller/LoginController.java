@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sh.manage.constants.Constants;
 import com.sh.manage.constants.SessionConstants;
-import com.sh.manage.entity.MukeCourse;
 import com.sh.manage.entity.SysAttachment;
 import com.sh.manage.entity.SysMenu;
 import com.sh.manage.entity.SysUser;

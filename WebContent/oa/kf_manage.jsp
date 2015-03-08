@@ -101,10 +101,12 @@
 							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
 							</button>
+							<div
+								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
+								<a onclick="addSetcar();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
+							</div>
 						</form>
 				</div>
-                
-                
                         <div class="table-responsive">
 										<table id="sample-table-1"
 											class="table table-striped table-bordered table-hover">
@@ -134,8 +136,13 @@
 													varStatus="status">
 													<tr>
 														<td>${car.id}</td>
-														<td>${car.targetDate}</td>
-														<td>${car.usecarDate}</td>
+														<td>
+														<fmt:parseDate value="${car.targetDate}" var="targetDate" pattern="yyyyMMdd"/>
+														<fmt:formatDate value="${targetDate}" pattern="yyyy年MM月dd日"/>
+														<td>
+														<fmt:parseDate value="${car.targetDate}" var="usecarDate" pattern="yyyyMMdd"/>
+														<fmt:formatDate value="${usecarDate}" pattern="yyyy年MM月dd日"/>
+														</td>
 														<td>${car.flightNumber}</td>
 														<td>
 														    <!-- 1 接/2送/3旅游/4包车 -->
@@ -161,7 +168,7 @@
 															onClick="editSetcar('${car.id}');"
 															class="btn btn-xs btn-primary"><i class="icon-edit"></i></a>
 															<a data-toggle="modal" href="#suserDel"
-																onClick="delSetcar('${car.id}');"
+																onClick="delSetcar('${car.id}','${car.customerName}');"
 																class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 														</c:if>
 															
@@ -181,10 +188,7 @@
 									</div>
 									<!-- /.table-responsive -->
 								<!-- /row -->
-							<div
-								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
-								<a onclick="addSetcar();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
-							</div>
+							
 							<div class="hr hr-18 dotted hr-double"></div>
                     </div>
                 </div>
@@ -221,7 +225,7 @@
   	//订车记录新增
     var addSetcar = function(){
     		var diag = new zDialog();
-    		diag.Height = 430;
+    		diag.Height = 450;
         	diag.Title = "客服管理-订车记录新增";
         	diag.URL = "<%=path %>/toAddOaKf.do";
         	diag.OKEvent = function(){
@@ -252,15 +256,32 @@
     
     //在父页面提交iframe中的表单
     //订车记录编辑
-    var editCourse = function(id){
-    	$('#edit-courseId').val(id);
-    	document.getElementById('editForm').submit();
+    var editSetcar = function(id){
+    	var diag = new zDialog();
+		diag.Height = 450;
+		diag.Title = "客服管理-订车记录编辑";
+    	diag.URL = "<%=path %>/toEditOaKf.do?parentId=${parentId}&ownId=${ownId}&carId="+id;
+    	diag.OKEvent = function(){
+    		diag.innerDoc.getElementById("carId").value = id;
+    		diag.innerDoc.getElementById('editForm').submit();
+    		diag.submited=true;
+    	};//点击确定后调用的方法
+    	diag.OnLoad=function(){
+    		if(diag.submited){
+    			diag.openerWindow.location.reload();
+                try{
+    				diag.close();
+                }catch(e){}
+    		}
+    	};
+    	diag.CancelEvent = function(){diag.close();};
+    	diag.show();
     }
     
     
     //订车记录删除
-    var delCourse= function(id,name){
-    	$('#del-userId').val(id);
+    var delSetcar= function(id,name){
+    	$('#del-carId').val(id);
     	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
     		document.getElementById('delForm').submit();diag.close();
     	});
@@ -280,12 +301,12 @@
 </script>    
 
 <form id="delForm" name="delForm" method="post" action="doDelGroup.do" target="thisFrame">
-	<input type="hidden" id="del-userId" name="userId">
+	<input type="hidden" id="del-carId" name="carId">
 </form>
-<form id="editForm" name="editForm" method="post" action="toEditCourse.do" target="_self">
-	<input type="hidden" id="edit-courseId" name="courseId">
+<%-- <form id="editForm" name="editForm" method="post" action="toEditOaKf.do" target="_self">
+	<input type="hidden" id="edit-carId" name="carId">
 	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">
 	<input type="hidden" id="edit-ownId" name="ownId" value="${ownId }">
-</form>
+</form> --%>
 <iframe style="display: none" name="thisFrame"></iframe>
 </html>

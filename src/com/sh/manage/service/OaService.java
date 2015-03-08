@@ -147,6 +147,26 @@ public class OaService extends BaseService {
 	}
 	
 	/**
+	 * 查找激活码记录
+	 * @param course
+	 */
+	public TOaGiffgaff findGiffgaff(Integer id)throws SPlatformServiceException {
+		try {
+			List<TOaGiffgaff> giffgaffList = oaJhmDao.findTOaGiffgaff(id);
+			//找到了激活码记录
+			if(null != giffgaffList){
+				return giffgaffList.get(0);
+			}
+			//找不到激活码记录
+			return new TOaGiffgaff();
+		} catch (Exception e) {
+			logger.error("service:查询激活码记录信息出现异常", e);
+			throw new SPlatformServiceException("查询激活码记录信息出现异常");
+		}
+	}
+	
+	
+	/**
 	 * 激活码记录添加
 	 * @param course
 	 */
