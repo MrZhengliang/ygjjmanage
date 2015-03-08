@@ -250,10 +250,11 @@
     
     //订车记录删除
     var delJhm= function(id,name){
-    	$('#del-jhmId').val(id);
-    	zDialog.confirm('警告：您确认要删除激活码记录['+name+']吗？',function(){
-    		document.getElementById('delForm').submit();diag.close();
-    	});
+    		$('#del-jhmId').val(id);
+    		zDialog.confirm('警告：您确认要删除激活码记录['+name+']吗？',function(){
+	    		document.getElementById('delForm').submit();
+	    		diag.close();
+    		});
     }
     </script>
 
@@ -269,7 +270,7 @@
 				}
 </script>    
 
-<form id="delForm" name="delForm" method="post" action="doDelJhm.do" target="thisFrame">
+<form id="delForm" name="delForm" method="post" action="doOaJhmDel.do" target="thisFrame">
 	<input type="hidden" id="del-jhmId" name="jhmId">
 	<input type="hidden" id="del-parentId" name="parentId" value="${parentId }">
 	<input type="hidden" id="del-ownId" name="ownId" value="${ownId }">

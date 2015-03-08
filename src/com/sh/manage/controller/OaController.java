@@ -367,7 +367,7 @@ public class OaController {
 	 * 订车记录删除
 	 * @return
 	 */
-	@RequestMapping(value = "/doDeloaKf.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/doDelOaKf.do", method = RequestMethod.POST)
 	public ResponseEntity<String> doDeloaKf(
 			@RequestParam(value = "carId", required = false, defaultValue = "") Integer carId,
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
