@@ -251,7 +251,7 @@
     //订车记录删除
     var delJhm= function(id,name){
     	$('#del-jhmId').val(id);
-    	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
+    	zDialog.confirm('警告：您确认要删除激活码记录['+name+']吗？',function(){
     		document.getElementById('delForm').submit();diag.close();
     	});
     }
@@ -270,12 +270,14 @@
 </script>    
 
 <form id="delForm" name="delForm" method="post" action="doDelJhm.do" target="thisFrame">
-	<input type="hidden" id="del-userId" name="userId">
+	<input type="hidden" id="del-jhmId" name="jhmId">
+	<input type="hidden" id="del-parentId" name="parentId" value="${parentId }">
+	<input type="hidden" id="del-ownId" name="ownId" value="${ownId }">
 </form>
-<form id="editForm" name="editForm" method="post" action="toEditJhm.do" target="_self">
+<%-- <form id="editForm" name="editForm" method="post" action="toEditJhm.do" target="_self">
 	<input type="hidden" id="edit-courseId" name="courseId">
 	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">
 	<input type="hidden" id="edit-ownId" name="ownId" value="${ownId }">
-</form>
+</form> --%>
 <iframe style="display: none" name="thisFrame"></iframe>
 </html>

@@ -685,7 +685,7 @@ public class OaController {
 	 * 激活码删除
 	 * @return
 	 */
-	@RequestMapping(value = "/oaJhmDel.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/doOaJhmDel.do", method = RequestMethod.POST)
 	public ResponseEntity<String> oaJhmDel(
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,

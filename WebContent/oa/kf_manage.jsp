@@ -300,8 +300,10 @@
 				}
 </script>    
 
-<form id="delForm" name="delForm" method="post" action="doDelGroup.do" target="thisFrame">
+<form id="delForm" name="delForm" method="post" action="doOaJhmDel.do" target="thisFrame">
 	<input type="hidden" id="del-carId" name="carId">
+	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">
+	<input type="hidden" id="edit-ownId" name="ownId" value="${ownId }">
 </form>
 <%-- <form id="editForm" name="editForm" method="post" action="toEditOaKf.do" target="_self">
 	<input type="hidden" id="edit-carId" name="carId">
