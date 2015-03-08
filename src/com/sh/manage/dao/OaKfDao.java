@@ -84,20 +84,20 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 			sbf.append(" and s.remark like '%"+remark+"%'");
 		}
 		if(!StringUtils.isEmpty(customerName)){
-			params = ArrayUtils.add(params, customerName);
-			sbf.append(" and s.customer_name = ?");
+			//params = ArrayUtils.add(params, customerName);
+			sbf.append(" and s.customer_name like '%"+customerName+"%'");
 		}
 		if(!StringUtils.isEmpty(telephone)){
-			params = ArrayUtils.add(params, telephone);
-			sbf.append(" and s.telephone = ?");
+			//params = ArrayUtils.add(params, telephone);
+			sbf.append(" and s.telephone like '%"+telephone+"%'");
 		}
 		if(!StringUtils.isEmpty(taobaoId)){
-			params = ArrayUtils.add(params, taobaoId);
-			sbf.append(" and s.taobao_id = ?");
+			//params = ArrayUtils.add(params, taobaoId);
+			sbf.append(" and s.taobao_id like '%"+taobaoId+"%'");
 		}
 		if(!StringUtils.isEmpty(weixinCode)){
-			params = ArrayUtils.add(params, weixinCode);
-			sbf.append(" and s.weixin_code = ?");
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.weixin_code like '%"+weixinCode+"%'");
 		}
 		if(!StringUtils.isEmpty(pickPeople)){
 			params = ArrayUtils.add(params, pickPeople);

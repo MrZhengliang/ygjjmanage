@@ -71,8 +71,8 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 		Object[] params = new Object[]{};
 		
 		if(!StringUtils.isEmpty(masterCard)){
-			params = ArrayUtils.add(params, masterCard);
-			sbf.append(" and s.master_card = ?");
+			//params = ArrayUtils.add(params, masterCard);
+			sbf.append(" and s.master_card like '%"+masterCard+"%'");
 		}
 		
 
