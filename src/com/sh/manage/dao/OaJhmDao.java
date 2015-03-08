@@ -61,7 +61,7 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 	 * @param pageSize
 	 * @return
 	 */
-	public Page getAllTOaGiffgaff(String masterCard,Integer pageNo, int pageSize) {
+	public Page getAllTOaGiffgaff(String masterCard,String weixinCode,Integer pageNo, int pageSize) {
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("select rt.* from (select s.id,s.buy_date buyDate,s.pack_date packDate,s.master_card masterCard,s.sliver_card sliverCard,s.username,s.terminal_id terminalId,"
 				+ "s.usetime_limit usetimeLimit,s.amount,s.taobao_id taobaoId,s.weixin_nickname weixinNickname,s.weixin_code weixinCode,"
@@ -73,6 +73,10 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 		if(!StringUtils.isEmpty(masterCard)){
 			//params = ArrayUtils.add(params, masterCard);
 			sbf.append(" and s.master_card like '%"+masterCard+"%'");
+		}
+		if(!StringUtils.isEmpty(weixinCode)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.master_card like '%"+weixinCode+"%'");
 		}
 		
 

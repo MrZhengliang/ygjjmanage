@@ -463,7 +463,7 @@ public class OaController {
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			
 			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
-			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
 			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
 			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
 		// 获取激活码以及等级
@@ -475,7 +475,7 @@ public class OaController {
 		model.addObject("masterCard", masterCard);
 		
 		// 返回的page对象
-		page = oaService.findAllTOaGiffgaff(masterCard, pageNo, pageSize);
+		page = oaService.findAllTOaGiffgaff(masterCard,weixinCode, pageNo, pageSize);
 		// 激活码列表
 		List<TOaGiffgaff> giffgaffList = (List<TOaGiffgaff>) page.getList();
 
