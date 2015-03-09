@@ -89,7 +89,7 @@
 									<!-- /.table-responsive -->
 								<!-- /row -->
 							<div
-								style="display: inline-block; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
+								style="display: none; background-repeat: no-repeat; border-width: 4px; font-size: 13px; line-height: 1.39; padding: 4px 9px;">
 								<a onclick="addSetcar();" href="javascript:;" class="btn btn-success btn-sm">添加</a>
 							</div>
 							<div class="hr hr-18 dotted hr-double"></div>

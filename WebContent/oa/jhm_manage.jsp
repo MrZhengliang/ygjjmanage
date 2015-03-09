@@ -73,11 +73,24 @@
 							<input type="text" placeholder="输入激活码" class="form-control" 
 									id="masterCard" name="masterCard" value="${masterCard }"
 								autocomplete="off" />
-							
+							<input type="text" placeholder="输入姓名" class="form-control" 
+									id="username" name="username" value="${username }"
+								autocomplete="off" />
+							<input type="text" placeholder="输入联系电话" class="form-control" 
+									id="terminalId" name="terminalId" value="${terminalId }"
+								autocomplete="off" />	
+							<input type="text" placeholder="淘宝" class="form-control" 
+									id="taobaoId" name="taobaoId" value="${taobaoId }"
+								autocomplete="off" />
 							<input type="text" placeholder="微信" class="form-control" 
 									id="weixinCode" name="weixinCode" value="${weixinCode }"
 								autocomplete="off" /> 
-							
+							<input type="text" placeholder="输入快递单号" class="form-control" 
+									id="deliverCode" name="deliverCode" value="${deliverCode }"
+								autocomplete="off" />
+							<input type="text" placeholder="输入备注" class="form-control" 
+									id="remark" name="remark" value="${remark }"
+								autocomplete="off" />
 							
 							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
@@ -116,7 +129,7 @@
 												<c:forEach items="${giffgaffList}" var="giffgaff"
 													varStatus="status">
 													<tr>
-														<td>${giffgaff.id}</td>
+														<td>${status.index + 1}</td>
 														<td>${giffgaff.masterCard}</td>
 														<td>${giffgaff.sliverCard}</td>
 														<td>${giffgaff.username}</td>
@@ -195,16 +208,19 @@
     		var diag = new zDialog();
     		diag.Height = 470;
         	diag.Title = "客服管理-激活码新增";
-        	diag.URL = "<%=path %>/toAddOaJhm.do";
+        	diag.URL = "<%=path %>/toAddOaJhm.do?parentId=${parentId}&ownId=${ownId}";
         	diag.OKEvent = function(){
         		//参数校验
-        		/* var title = diag.innerDoc.getElementById("title").value;
-        		var name = diag.innerDoc.getElementById("name").value;
-        		if(title == '' || name == ''){
-        			alert('请输入订车记录名和姓名');
-        			//$("input[type='text'][name='usercode']").focus();
+        		//参数校验
+        		var terminalId = diag.innerDoc.getElementById("terminalId").value;
+        		if(terminalId == ''){
+        			alert('请输入激活码记录联系电话');
         			return;
-        		} */
+        		}
+        		if(terminalId.length > 11){
+        			alert('请输入正确联系电话');
+        			return;
+        		}
         		
         		//提交表单
         		diag.innerDoc.getElementById('addJhmForm').submit();

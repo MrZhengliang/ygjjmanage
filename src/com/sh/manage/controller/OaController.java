@@ -75,7 +75,7 @@ public class OaController {
 	private Page page;
 
 	/**
-	 * 跳转客服记录管理页面
+	 * 跳转订车记录管理页面
 	 * 
 	 * @return
 	 */
@@ -99,7 +99,7 @@ public class OaController {
 		if (null == pageNo) {
 			pageNo = initPageNo;
 		}
-		// 返回客服列表页
+		// 返回订车记录列表页
 		ModelAndView model = new ModelAndView("/oa/kf_manage");
 		model.addObject("sendDate", sendDate);
 		model.addObject("usecarDate", usecarDate);
@@ -117,7 +117,7 @@ public class OaController {
 				telephone, taobaoId, weixinCode, pickPeople, remark, pageNo,
 				pageSize);
 
-		// 客服列表
+		// 订车记录列表
 		List<TOaSetcar> oaSetcarList = (List<TOaSetcar>) page.getList();
 
 
@@ -165,27 +165,28 @@ public class OaController {
 		model.addObject("parentId", parentId);
 		model.addObject("ownId", ownId);
 		model.addObject("oaSetcarList", oaSetcarList);
-		
 		return model;
 	}
 
 	
 	
 	/**
-	 * 跳转客服添加页面
+	 * 跳转订车记录添加页面
 	 */
 	@RequestMapping(value="/toAddOaKf.do")
-    public ModelAndView oaKfAddPage(HttpServletRequest req,
-			HttpServletResponse resp) {
+    public ModelAndView oaKfAddPage(
+    		@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+    		HttpServletRequest req,HttpServletResponse resp) {
 		HttpSession session = req.getSession();
 		ModelAndView model = new ModelAndView("/oa/kf_add");
 		
 		//获取客服信息
     	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 		if (null != _loginUser) {
-			// 客服类型
-
 			model.addObject("loginUser",_loginUser);
+			model.addObject("parentId", parentId);
+			model.addObject("ownId", ownId);
 		}
         return model;
     }
@@ -195,7 +196,7 @@ public class OaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/doAddOaKf.do", method = RequestMethod.POST)
-	public ResponseEntity<String> oaKfAdd(
+	public ResponseEntity<String> doAddOaKf(
 			@RequestParam(value = "sendDate", required = false, defaultValue = "") String sendDate,
 			@RequestParam(value = "usecarDate", required = false, defaultValue = "") String usecarDate,
 			@RequestParam(value = "useType", required = false, defaultValue = "") Integer useType,
@@ -210,9 +211,11 @@ public class OaController {
 			@RequestParam(value = "memCode", required = false, defaultValue = "") String memCode,
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
-		logger.info("controller:..客服添加!");
+		logger.info("controller:..订车记录添加!");
 		String msg="";
 		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -246,20 +249,19 @@ public class OaController {
 				
 				int result = oaService.addOaSetcar(car);
 				if(result > 0){
-					msg="客服订车记录添加成功!";
+					msg="订车记录添加成功!";
 				}else{
-					msg="客服订车记录添加失败!";
+					msg="订车记录添加失败!";
 				}
-			
 			}
 		}catch(Exception e){
-			logger.error("controller:客服订车记录添加异常!"+customerName,e);
-			msg="客服订车记录添加出现异常";
+			logger.error("controller:订车记录添加异常!"+customerName,e);
+			msg="订车记录添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
-		logger.info("controller:客服订车记录添加结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do")+"'</script>",responseHeaders, HttpStatus.CREATED);
+		logger.info("controller:订车记录添加结束!");
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -333,7 +335,7 @@ public class OaController {
 				TOaSetcar car = oaService.findSetcar(carId);
 				
 				car.setUseType(useType);//类型
-				car.setTargetDate(TimeUtil.now());//咨询日期，预定日
+				car.setTargetDate(TimeUtil.nowDate());//咨询日期，预定日
 				car.setOperateId(_loginUser.getId());//操作员id
 				car.setCustomerName(customerName);//姓名
 				car.setFlightNumber(flightNumber);//航班
@@ -461,10 +463,14 @@ public class OaController {
 	public ModelAndView oaJhmManagePage(
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
-			
 			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
+			@RequestParam(value = "username", required = false, defaultValue = "") String username,
+			@RequestParam(value = "terminalId", required = false, defaultValue = "") String terminalId,
+			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
 			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
-			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
+			@RequestParam(value = "deliverCode", required = false, defaultValue = "") String deliverCode,
+			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
+			
 			@RequestParam(value = "pageNo", required = false, defaultValue = "") Integer pageNo) {
 		// 获取激活码以及等级
 		if (null == pageNo) {
@@ -475,7 +481,7 @@ public class OaController {
 		model.addObject("masterCard", masterCard);
 		
 		// 返回的page对象
-		page = oaService.findAllTOaGiffgaff(masterCard,weixinCode, pageNo, pageSize);
+		page = oaService.findAllTOaGiffgaff(masterCard,username,terminalId,taobaoId,weixinCode,deliverCode,remark, pageNo, pageSize);
 		// 激活码列表
 		List<TOaGiffgaff> giffgaffList = (List<TOaGiffgaff>) page.getList();
 
@@ -492,6 +498,12 @@ public class OaController {
 		model.addObject("giffgaffList", giffgaffList);
 		model.addObject("masterCard", masterCard);
 		
+		model.addObject("username", username);
+		model.addObject("terminalId", terminalId);
+		model.addObject("taobaoId", taobaoId);
+		model.addObject("weixinCode", weixinCode);
+		model.addObject("deliverCode", deliverCode);
+		model.addObject("remark", remark);
 		return model;
 	}
 	
@@ -500,8 +512,10 @@ public class OaController {
 	 * 跳转激活码添加页面
 	 */
 	@RequestMapping(value="/toAddOaJhm.do")
-    public ModelAndView oaJhmAddPage(HttpServletRequest req,
-			HttpServletResponse resp) {
+    public ModelAndView oaJhmAddPage(
+    		@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			HttpServletRequest req,HttpServletResponse resp) {
 		HttpSession session = req.getSession();
 		ModelAndView model = new ModelAndView("/oa/jhm_add");
 		//获取登录用户信息
@@ -509,6 +523,8 @@ public class OaController {
 		if (null != _loginUser) {
 			// 登录用户
 			model.addObject("loginUser",_loginUser);
+			model.addObject("parentId", parentId);
+			model.addObject("ownId", ownId);
 		}
         return model;
     }
@@ -533,11 +549,13 @@ public class OaController {
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
 			@RequestParam(value = "amount", required = false, defaultValue = "") double amount,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
-			
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			HttpServletRequest request,HttpServletResponse response,
 			Model model) {
 		logger.info("controller:..激活码添加!");
 		String msg="";
+		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -566,9 +584,9 @@ public class OaController {
 				
 				int result = oaService.addOaGiffgaff(giffgaff);
 				if(result > 0){
-					msg="0";
+					msg="激活码记录添加成功!";
 				}else{
-					msg="0002";
+					msg="激活码记录添加失败!";
 				}
 			
 			}
@@ -576,10 +594,10 @@ public class OaController {
 			logger.error("controller:激活码添加异常!"+username+"--"+masterCard,e);
 			msg="激活码添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:激活码添加结束!");
-		return new ResponseEntity<String>(msg,responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	

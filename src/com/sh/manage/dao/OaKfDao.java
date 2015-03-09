@@ -104,7 +104,7 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 			sbf.append(" and s.pick_people = ?");
 		}
 
-		sbf.append(") as rt");
+		sbf.append(") as rt order by rt.id desc");
 		return this.queryModelDTOListByPage(sbf.toString(), params, pageNo, pageSize, TOaSetcarDTO.class);
 	}
 
@@ -139,7 +139,7 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 		}
 	
 
-		sbf.append(") as rt");
+		sbf.append(") as rt order by rt.id desc");
 		return (List<TOaSetcarDTO>) this.querysqlDTOList(sbf.toString(), params, TOaSetcarDTO.class);
 	}
 }

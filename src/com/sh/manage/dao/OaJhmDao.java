@@ -61,7 +61,7 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 	 * @param pageSize
 	 * @return
 	 */
-	public Page getAllTOaGiffgaff(String masterCard,String weixinCode,Integer pageNo, int pageSize) {
+	public Page getAllTOaGiffgaff(String masterCard,String username,String terminalId,String taobaoId,String weixinCode,String deliverCode,String remark,Integer pageNo, int pageSize) {
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("select rt.* from (select s.id,s.buy_date buyDate,s.pack_date packDate,s.master_card masterCard,s.sliver_card sliverCard,s.username,s.terminal_id terminalId,"
 				+ "s.usetime_limit usetimeLimit,s.amount,s.taobao_id taobaoId,s.weixin_nickname weixinNickname,s.weixin_code weixinCode,"
@@ -74,13 +74,31 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 			//params = ArrayUtils.add(params, masterCard);
 			sbf.append(" and s.master_card like '%"+masterCard+"%'");
 		}
+		if(!StringUtils.isEmpty(username)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.username like '%"+username+"%'");
+		}
+		if(!StringUtils.isEmpty(terminalId)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.terminal_id like '%"+terminalId+"%'");
+		}
+		if(!StringUtils.isEmpty(taobaoId)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.taobao_id like '%"+taobaoId+"%'");
+		}
 		if(!StringUtils.isEmpty(weixinCode)){
 			//params = ArrayUtils.add(params, weixinCode);
-			sbf.append(" and s.master_card like '%"+weixinCode+"%'");
+			sbf.append(" and s.weixin_code like '%"+weixinCode+"%'");
 		}
-		
-
-		sbf.append(") as rt");
+		if(!StringUtils.isEmpty(deliverCode)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.deliver_code like '%"+deliverCode+"%'");
+		}
+		if(!StringUtils.isEmpty(remark)){
+			//params = ArrayUtils.add(params, weixinCode);
+			sbf.append(" and s.remark like '%"+remark+"%'");
+		}
+		sbf.append(") as rt order by rt.id desc");
 		return this.queryModelDTOListByPage(sbf.toString(), params, pageNo, pageSize, TOaGiffgaffDTO.class);
 	}
 
@@ -107,7 +125,7 @@ public class OaJhmDao extends AbstractBaseDao<TOaGiffgaff>{
 			sbf.append(" and s.id = ? ");
 		}
 	
-		sbf.append(") as rt");
+		sbf.append(") as rt order by rt.id desc");
 		return (List<TOaGiffgaffDTO>) this.querysqlDTOList(sbf.toString(), params, TOaGiffgaffDTO.class);
 	}
 }

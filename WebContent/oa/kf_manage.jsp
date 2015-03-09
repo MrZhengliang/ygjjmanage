@@ -98,7 +98,7 @@
 									id="remark" name="remark" value="${remark }"
 								autocomplete="off" />
 							
-							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
+							<button class="btn btn-info btn-line mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
 							</button>
 							<div
@@ -135,7 +135,7 @@
 												<c:forEach items="${oaSetcarList}" var="car"
 													varStatus="status">
 													<tr>
-														<td>${car.id}</td>
+														<td>${status.index + 1}</td>
 														<td>
 														<fmt:parseDate value="${car.targetDate}" var="targetDate" pattern="yyyyMMdd"/>
 														<fmt:formatDate value="${targetDate}" pattern="yyyy年MM月dd日"/>
@@ -205,7 +205,6 @@
 
 
     <!-- GLOBAL SCRIPTS -->
-    <script src="<%=path%>/static/assets/plugins/jquery-2.0.3.min.js"></script>
     <script src="<%=path%>/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="<%=path%>/static/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     <!-- END GLOBAL SCRIPTS -->
@@ -227,17 +226,18 @@
     		var diag = new zDialog();
     		diag.Height = 450;
         	diag.Title = "客服管理-订车记录新增";
-        	diag.URL = "<%=path %>/toAddOaKf.do";
+        	diag.URL = "<%=path %>/toAddOaKf.do?parentId=${parentId}&ownId=${ownId}";
         	diag.OKEvent = function(){
         		//参数校验
-        		/* var title = diag.innerDoc.getElementById("title").value;
-        		var name = diag.innerDoc.getElementById("name").value;
-        		if(title == '' || name == ''){
-        			alert('请输入订车记录名和姓名');
-        			//$("input[type='text'][name='usercode']").focus();
+        		var telephone = diag.innerDoc.getElementById("telephone").value;
+        		if(telephone == ''){
+        			alert('请输入订车记录联系电话');
         			return;
-        		} */
-        		
+        		}
+        		if(telephone.length > 11){
+        			alert('请输入正确联系电话');
+        			return;
+        		}
         		//提交表单
         		diag.innerDoc.getElementById('addForm').submit();
         		diag.submited=true;

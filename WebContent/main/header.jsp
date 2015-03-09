@@ -9,7 +9,7 @@ String hpath=this.getServletContext().getContextPath();
 		<title>英国接机管理平台</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-		<meta content="" name="description" />
+		<meta content="英国接机管理平台,英国接机,管理平台" name="description" />
 		<meta content="" name="author" />
 <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -48,6 +48,4 @@ String hpath=this.getServletContext().getContextPath();
 		    max-width: 100%;
 		}
     </style>
-    
-
-    </head>
+</head>

@@ -56,6 +56,8 @@
 					<form class="" method="post" id="addForm" name="addForm"
 						action="<spring:url value='/doAddOaKf.do' htmlEscape='true'/>" target="_self">
 						<input type="hidden" name="uid" value="${loginUser.id}">
+						<input type="hidden" id="parentId" name="parentId" value="${parentId }" />
+		            	<input type="hidden" id="ownId" name="ownId" value="${ownId }" />
 						<ul class="box_l_h_c">
 							<li class="box_l_h_c_li">
 								接送类型:<select id="useType" name="useType" class="form-control"

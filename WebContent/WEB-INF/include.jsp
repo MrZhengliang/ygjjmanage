@@ -6,5 +6,4 @@
 <%@ taglib prefix="btn" uri="../WEB-INF/tlds/splatform-btn.tld"%>
 <%
 String path=this.getServletContext().getContextPath();
-//String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
 %>

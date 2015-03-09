@@ -124,8 +124,8 @@ public class OaService extends BaseService {
 	 * @param pageSize
 	 * @return
 	 */
-	public Page findAllTOaGiffgaff(String masterCard,String weixinCode,Integer pageNo, int pageSize) {
-		return oaJhmDao.getAllTOaGiffgaff(masterCard,weixinCode, pageNo, pageSize);
+	public Page findAllTOaGiffgaff(String masterCard,String username,String terminalId,String taobaoId,String weixinCode,String deliverCode,String remark,Integer pageNo, int pageSize) {
+		return oaJhmDao.getAllTOaGiffgaff(masterCard,username,terminalId,taobaoId,weixinCode,deliverCode,remark, pageNo, pageSize);
 	}
 	/**
 	 * 查找激活码记录其他信息
