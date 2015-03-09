@@ -28,7 +28,7 @@ public class BaseConfiguration {
 	protected static final PropertiesConfiguration config = PropertiesFactory.getPropertiesConfiguration("config.properties");
 	
 	
-	protected static final PropertiesConfiguration configIVR = PropertiesFactory.getPropertiesConfiguration("configIvr.properties");
+//	protected static final PropertiesConfiguration configIVR = PropertiesFactory.getPropertiesConfiguration("configIvr.properties");
 	
 	/**
 	 * 获取属性值方法1
@@ -57,30 +57,30 @@ public class BaseConfiguration {
 	}
 	
 	
-	/**
-	 * 获取属性值方法4
-	 * @param key
-	 * @return
-	 */
-	protected static String getValIVR(String key){
-		return getValIVR(key,"");
-	}
-	/**
-	 * 获取属性值方法5
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	protected static String getValIVR(String key, String defaultValue) {
-		return configIVR.getString(key, defaultValue);
-	}
-	/**
-	 * 获取属性值方法6
-	 * @param key
-	 * @return
-	 */
-	protected static String[] getValsIVR(String key){
-	    return configIVR.getStringArray(key);
-	}
+//	/**
+//	 * 获取属性值方法4
+//	 * @param key
+//	 * @return
+//	 */
+//	protected static String getValIVR(String key){
+//		return getValIVR(key,"");
+//	}
+//	/**
+//	 * 获取属性值方法5
+//	 * @param key
+//	 * @param defaultValue
+//	 * @return
+//	 */
+//	protected static String getValIVR(String key, String defaultValue) {
+//		return configIVR.getString(key, defaultValue);
+//	}
+//	/**
+//	 * 获取属性值方法6
+//	 * @param key
+//	 * @return
+//	 */
+//	protected static String[] getValsIVR(String key){
+//	    return configIVR.getStringArray(key);
+//	}
 	
 }

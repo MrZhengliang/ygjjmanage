@@ -29,7 +29,7 @@
 
 	<!-- 静态资源(js/image)的访问 -->
 	<mvc:resources location="/static/" mapping="/static/**" />
-	<mvc:resources location="/splatform-s3h4-m/res/" mapping="/splatform-s3h4-m/res/**" />
+	<mvc:resources location="/ygjjmanage/res/" mapping="/ygjjmanage/res/**" />
 
 	
 	<!-- 静态资源访问，方案2 -->

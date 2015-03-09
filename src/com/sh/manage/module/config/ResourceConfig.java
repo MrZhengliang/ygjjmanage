@@ -49,48 +49,29 @@ public class ResourceConfig extends BaseConfiguration {
 		return getVal("MEMCACH_CLIENT_URL");
 	}
 	
-	/**
-	 * 用户信息第三方接入URL
-	 * @return
-	 */
-	public static String getUserInfoToIVRUrl(){
-		
-		return getValIVR("USERINFO_URL");
-	}
-	/**
-	 * 用户信息第三方接入平台标识码
-	 * @return
-	 */
-	public static String getUserInfoToIVRIdentiy(){
-		
-		return getValIVR("USERINFO_IDENT");
-	}
-	/**
-	 * 用户信息第三方接入密钥
-	 * @return
-	 */
-	public static String getUserInfoToIVRKey(){
-		
-		return getValIVR("USERINFO_KEY");
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+//	/**
+//	 * 用户信息第三方接入URL
+//	 * @return
+//	 */
+//	public static String getUserInfoToIVRUrl(){
+//		
+//		return getValIVR("USERINFO_URL");
+//	}
+//	/**
+//	 * 用户信息第三方接入平台标识码
+//	 * @return
+//	 */
+//	public static String getUserInfoToIVRIdentiy(){
+//		
+//		return getValIVR("USERINFO_IDENT");
+//	}
+//	/**
+//	 * 用户信息第三方接入密钥
+//	 * @return
+//	 */
+//	public static String getUserInfoToIVRKey(){
+//		
+//		return getValIVR("USERINFO_KEY");
+//	}
 
 }
