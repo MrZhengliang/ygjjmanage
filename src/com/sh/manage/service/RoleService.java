@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sh.manage.dao.RoleDao;
 import com.sh.manage.dao.SysRoleDao;
-import com.sh.manage.entity.SysGroupRole;
 import com.sh.manage.entity.SysMenu;
 import com.sh.manage.entity.SysRole;
 import com.sh.manage.entity.SysRoleMenu;

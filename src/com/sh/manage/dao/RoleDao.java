@@ -19,10 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.sh.manage.constants.SessionConstants;
-import com.sh.manage.entity.AppUser;
 import com.sh.manage.entity.SysGroupRole;
-import com.sh.manage.entity.SysMenu;
 import com.sh.manage.entity.SysRole;
 import com.sh.manage.entity.SysRoleMenu;
 import com.sh.manage.exception.SPlatformDaoException;

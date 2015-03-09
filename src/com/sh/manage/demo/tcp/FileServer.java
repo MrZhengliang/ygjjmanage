@@ -14,7 +14,6 @@ public class FileServer // 服务端
 		server();
 	}
 
-	@SuppressWarnings("resource")
 	public void server() throws Exception {
 		ServerSocket serversock = new ServerSocket(10007); // 监听端口
 		while (true) {

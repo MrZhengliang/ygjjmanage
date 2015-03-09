@@ -427,6 +427,7 @@ public class LoginService {
 	 * @param userMenuList
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public List<ZTreeNode> generUserZtreeNode(List<SysMenu> userMenuList) {
 		List<ZTreeNode> nodes = new ArrayList<ZTreeNode>();
 		for(SysMenu menu : userMenuList){
