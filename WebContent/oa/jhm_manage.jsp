@@ -92,7 +92,7 @@
 									id="remark" name="remark" value="${remark }"
 								autocomplete="off" />
 							
-							<button class="btn btn-default mt5" type="button" onClick="submitSearchForm()">
+							<button class="btn btn-info btn-line mt5" type="button" onClick="submitSearchForm()">
 												<i class="icon-search"></i>
 							</button>
 							<div
@@ -149,7 +149,7 @@
 															onClick="editJhm('${giffgaff.id}');"
 															class="btn btn-xs btn-primary"><i class="icon-edit"></i></a>
 															<a data-toggle="modal" href="#suserDel"
-																onClick="delJhm('${giffgaff.id}','${giffgaff.username}');"
+																onClick="delJhm('${giffgaff.id}','${giffgaff.masterCard}');"
 																class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 														</c:if>
 															
@@ -211,14 +211,9 @@
         	diag.URL = "<%=path %>/toAddOaJhm.do?parentId=${parentId}&ownId=${ownId}";
         	diag.OKEvent = function(){
         		//参数校验
-        		//参数校验
         		var terminalId = diag.innerDoc.getElementById("terminalId").value;
         		if(terminalId == ''){
-        			alert('请输入激活码记录联系电话');
-        			return;
-        		}
-        		if(terminalId.length > 11){
-        			alert('请输入正确联系电话');
+        			alert('请输入激活码记录-联系电话');
         			return;
         		}
         		
@@ -266,11 +261,33 @@
     
     //订车记录删除
     var delJhm= function(id,name){
-    		$('#del-jhmId').val(id);
+    		/* $('#del-jhmId').val(id);
     		zDialog.confirm('警告：您确认要删除激活码记录['+name+']吗？',function(){
 	    		document.getElementById('delForm').submit();
 	    		diag.close();
-    		});
+    		}); */
+    	
+    		var diag = new zDialog();
+		diag.Height = 150;
+		diag.Width = 320;
+    	diag.Title = "客服管理-激活码删除";
+    	diag.URL = "<%=path %>/toOaJhmDel.do?parentId=${parentId}&ownId=${ownId}&jhmId="+id+"&name="+name;
+    	diag.OKEvent = function(){
+    		//提交表单
+    		diag.innerDoc.getElementById('delForm').submit();
+    		diag.submited=true;
+    	};//点击确定后调用的方法
+    	diag.OnLoad=function(){
+    		if(diag.submited){
+    			diag.openerWindow.location.reload();
+                try{
+    				diag.close();
+                }catch(e){}
+    		}
+    	};
+    	diag.CancelEvent = function(){diag.close();};
+    	diag.show();
+    		
     }
     </script>
 
@@ -286,11 +303,7 @@
 				}
 </script>    
 
-<form id="delForm" name="delForm" method="post" action="doOaJhmDel.do" target="thisFrame">
-	<input type="hidden" id="del-jhmId" name="jhmId">
-	<input type="hidden" id="del-parentId" name="parentId" value="${parentId }">
-	<input type="hidden" id="del-ownId" name="ownId" value="${ownId }">
-</form>
+
 <%-- <form id="editForm" name="editForm" method="post" action="toEditJhm.do" target="_self">
 	<input type="hidden" id="edit-courseId" name="courseId">
 	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">

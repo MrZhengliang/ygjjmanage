@@ -53,13 +53,12 @@
 <!-- BEGIN BODY -->
 <body>
 	<div id="wrap">
-					<form class="" method="post" id="addJhmForm" name="addJhmForm"
+					<form method="post" id="addJhmForm" name="addJhmForm"
 						action="<spring:url value='/doAddOaJhm.do' htmlEscape='true'/>" target="_self">
 						<input type="hidden" name="uid" value="${loginUser.id}">
 						<input type="hidden" id="parentId" name="parentId" value="${parentId }" />
 		            	<input type="hidden" id="ownId" name="ownId" value="${ownId }" />
 						<ul class="box_l_h_c">
-							
 							<li class="box_l_h_c_li">
 								激活码:<input id="masterCard" class="form-control span3" type="text"
 									name="masterCard" value="" placeholder="激活码">
@@ -69,7 +68,6 @@
 									placeholder="备卡" class="form-control span3" id="sliverCard"
 									autocomplete="off" />
 							</li>
-							
 							<li class="box_l_h_c_li">
 								姓名:<input name="username" id="username" type="text"
 									placeholder="姓名" class="form-control span3" 
@@ -134,7 +132,5 @@
 				var setSuStatus = function(suStatus){
 					document.getElementById("status").value=suStatus;
 				}*/
-				
 </script>    
-		
 </html>

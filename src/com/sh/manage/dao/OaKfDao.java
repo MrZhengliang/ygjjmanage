@@ -128,7 +128,7 @@ public class OaKfDao extends AbstractBaseDao<TOaSetcar>{
 	public List<TOaSetcarDTO> findTOaSetcarDTO(Integer id) {
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("select rt.* from (select s.id,s.target_date targetDate,s.usecar_date usecarDate,s.flight_number flightNumber ,s.use_type useType,s.customer_name customerName,"
-				+ "s.people_number peopleNumber,s.telephone,s.taobao_id taobaoId,s.weixin_code weixinCode,s.qq_code qqCode,s.pick_people pickPeople,u.name operateName from t_oa_setcar s join t_sys_user u on s.operate_id=u.uid  ");
+				+ "s.people_number peopleNumber,s.telephone,s.taobao_id taobaoId,s.weixin_code weixinCode,s.qq_code qqCode,s.pick_people pickPeople,s.remark,u.name operateName from t_oa_setcar s join t_sys_user u on s.operate_id=u.uid  ");
 		sbf.append(" where 1 = 1 ");//有效的用户and s.status = 1
 
 		Object[] params = new Object[]{};

@@ -281,10 +281,33 @@
     
     //订车记录删除
     var delSetcar= function(id,name){
-    	$('#del-carId').val(id);
+    	/* $('#del-carId').val(id);
     	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
-    		document.getElementById('delForm').submit();diag.close();
+    		document.getElementById('delForm').submit();
+    		
+    		alert(456);
     	});
+    	 */
+    	var diag = new zDialog();
+		diag.Height = 150;
+		diag.Width = 320;
+		diag.Title = "客服管理-订车记录删除";
+    	diag.URL = "<%=path %>/toDelOaKf.do?parentId=${parentId}&ownId=${ownId}&carId="+id+"&name="+name;
+    	diag.OKEvent = function(){
+    		diag.innerDoc.getElementById('delForm').submit();
+    		diag.submited=true;
+    	};//点击确定后调用的方法
+    	diag.OnLoad=function(){
+    		if(diag.submited){
+    			diag.openerWindow.location.reload();
+                try{
+    				diag.close();
+                }catch(e){}
+    		}
+    	};
+    	diag.CancelEvent = function(){diag.close();};
+    	diag.show();
+    	
     }
     </script>
 

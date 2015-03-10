@@ -1,5 +1,6 @@
 package com.sh.manage.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sh.manage.constants.Constants;
 import com.sh.manage.constants.SessionConstants;
 import com.sh.manage.entity.TOaGiffgaff;
 import com.sh.manage.entity.TOaSetcar;
@@ -217,7 +219,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..订车记录添加!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -258,10 +259,11 @@ public class OaController {
 			logger.error("controller:订车记录添加异常!"+customerName,e);
 			msg="订车记录添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:订车记录添加结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		//return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -321,7 +323,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..订车记录修改!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -359,11 +360,55 @@ public class OaController {
 			logger.error("controller:订车记录修改异常!"+carId,e);
 			msg="订车记录修改出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
-			
+			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:订车记录修改结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+	}
+	
+	
+	
+	/**
+	 * 订车记录删除页面
+	 * @return
+	 */
+	@RequestMapping(value = "/toDelOaKf.do", method = RequestMethod.GET)
+	public ModelAndView toDelOaKfPage(
+			@RequestParam(value = "carId", required = false, defaultValue = "") Integer carId,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			HttpServletRequest request,HttpServletResponse response) {
+		logger.info("controller:..订车记录删除面!");
+		ModelAndView model = new ModelAndView("/oa/kf_del");
+		HttpSession session = request.getSession();
+		try{
+			//获取客服信息
+	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
+			if (null != _loginUser) {
+				//get/new course
+//				TOaSetcarDTO car = oaService.findTOaSetcarDTO(carId);
+//				model.addObject("car", car);
+				try {
+					//get请求转换搜索的中文，防止出现乱码问题
+					String applyMethod = request.getMethod();
+					if(applyMethod.equalsIgnoreCase("get")){
+						name = new String(name.getBytes("iso-8859-1"),Constants.CHARSET_UTF8);
+					}
+				} catch (UnsupportedEncodingException e) {
+					name="";
+					e.printStackTrace();
+				}
+			}
+		}catch(Exception e){
+			logger.error("controller:订车记录删除页面异常!"+carId,e);
+		}
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		model.addObject("name", name);
+		model.addObject("carId", carId);
+		
+        return model;
 	}
 	/**
 	 * 订车记录删除
@@ -378,7 +423,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..订车记录删除!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -402,11 +446,10 @@ public class OaController {
 			logger.error("controller:订车记录删除异常!"+carId,e);
 			msg="订车记录删除出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
-			
+			return new ResponseEntity<String>("<script>alert('" + msg + "');window.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:订车记录删除结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "'); window.location.href='" + WebUtils.formatURI(request, "/oakfmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -518,6 +561,7 @@ public class OaController {
 			HttpServletRequest req,HttpServletResponse resp) {
 		HttpSession session = req.getSession();
 		ModelAndView model = new ModelAndView("/oa/jhm_add");
+		logger.info("跳转激活码添加页面....");
 		//获取登录用户信息
     	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 		if (null != _loginUser) {
@@ -541,13 +585,12 @@ public class OaController {
 			@RequestParam(value = "masterCard", required = false, defaultValue = "") String masterCard,
 			@RequestParam(value = "sliverCard", required = false, defaultValue = "") String sliverCard,
 			@RequestParam(value = "username", required = false, defaultValue = "") String username,
-			
 			@RequestParam(value = "terminalId", required = false, defaultValue = "") String terminalId,
 			@RequestParam(value = "taobaoId", required = false, defaultValue = "") String taobaoId,
 			@RequestParam(value = "weixinCode", required = false, defaultValue = "") String weixinCode,
 			@RequestParam(value = "deliverCode", required = false, defaultValue = "") String deliverCode,
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark,
-			@RequestParam(value = "amount", required = false, defaultValue = "") double amount,
+			@RequestParam(value = "amount", required = false, defaultValue = "") String amount,
 			@RequestParam(value = "uid", required = false, defaultValue = "") Integer uid,
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
@@ -555,7 +598,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..激活码添加!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -569,7 +611,7 @@ public class OaController {
 				//new giffgaff
 				TOaGiffgaff giffgaff = new TOaGiffgaff();
 				
-				giffgaff.setAmount(amount);
+				giffgaff.setAmount(amount==null?0.0:Double.valueOf(amount));
 				giffgaff.setBuyDate(buyDate==null?"":buyDate.replaceAll("-", ""));
 				giffgaff.setDeliverCode(deliverCode);//快递单
 				giffgaff.setMasterCard(masterCard);//激活码
@@ -591,13 +633,14 @@ public class OaController {
 			
 			}
 		}catch(Exception e){
+			e.printStackTrace();
 			logger.error("controller:激活码添加异常!"+username+"--"+masterCard,e);
 			msg="激活码添加出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:激活码添加结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -658,7 +701,6 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..激活码修改!");
 		String msg="";
-		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -693,12 +735,54 @@ public class OaController {
 			logger.error("controller:激活码修改异常!"+jhmId,e);
 			msg="激活码修改出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
-			
+			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 		}
 		logger.info("controller:激活码修改结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
+	
+	/**
+	 * 激活码删除页面
+	 * @return
+	 */
+	@RequestMapping(value = "/toOaJhmDel.do", method = RequestMethod.GET)
+	public ModelAndView toDelOaJhmPage(
+			@RequestParam(value = "jhmId", required = false, defaultValue = "") Integer jhmId,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			HttpServletRequest request,HttpServletResponse response) {
+		logger.info("controller:..激活码删除页面!");
+		ModelAndView model = new ModelAndView("/oa/jhm_del");
+		HttpSession session = request.getSession();
+		try{
+			//获取客服信息
+	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
+			if (null != _loginUser) {
+				//get/new TOaGiffgaff
+//				TOaGiffgaffDTO giffgaff = oaService.findTOaGiffgaffDTO(jhmId);
+//				model.addObject("giffgaff", giffgaff);
+				try {
+					//get请求转换搜索的中文，防止出现乱码问题
+					String applyMethod = request.getMethod();
+					if(applyMethod.equalsIgnoreCase("get")){
+						name = new String(name.getBytes("iso-8859-1"),Constants.CHARSET_UTF8);
+					}
+				} catch (UnsupportedEncodingException e) {
+					name="";
+					e.printStackTrace();
+				}
+			}
+		}catch(Exception e){
+			logger.error("controller:激活码删除页面异常!"+jhmId,e);
+		}
+		model.addObject("parentId", parentId);
+		model.addObject("ownId", ownId);
+		model.addObject("jhmId", jhmId);
+		model.addObject("name", name);
+        return model;
+	}
+	
 	/**
 	 * 激活码删除
 	 * @return
@@ -713,7 +797,7 @@ public class OaController {
 			Model model) {
 		logger.info("controller:..激活码删除!");
 		String msg="";
-		boolean isCorrect = true;
+//		boolean isCorrect = true;
 		HttpHeaders responseHeaders = new HttpHeaders();
 		HttpSession session = request.getSession();
 		responseHeaders.set("Content-Type", "text/html;charset=UTF-8");
@@ -736,11 +820,10 @@ public class OaController {
 			logger.error("controller:激活码删除异常!"+jhmId,e);
 			msg="激活码删除出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
-			
+			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);			
 		}
 		logger.info("controller:激活码删除结束!");
-		return new ResponseEntity<String>("<script>parent.callBack('msgdiv','" + msg + "'," + isCorrect + ");parent.close(); parent.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
