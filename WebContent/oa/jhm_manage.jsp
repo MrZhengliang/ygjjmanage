@@ -259,21 +259,14 @@
     }
     
     
-    //订车记录删除
+    //激活码删除
     var delJhm= function(id,name){
-    		/* $('#del-jhmId').val(id);
-    		zDialog.confirm('警告：您确认要删除激活码记录['+name+']吗？',function(){
-	    		document.getElementById('delForm').submit();
-	    		diag.close();
-    		}); */
-    	
-    		var diag = new zDialog();
+    	var diag = new zDialog();
 		diag.Height = 150;
 		diag.Width = 320;
     	diag.Title = "客服管理-激活码删除";
     	diag.URL = "<%=path %>/toOaJhmDel.do?parentId=${parentId}&ownId=${ownId}&jhmId="+id+"&name="+name;
     	diag.OKEvent = function(){
-    		//提交表单
     		diag.innerDoc.getElementById('delForm').submit();
     		diag.submited=true;
     	};//点击确定后调用的方法

@@ -281,13 +281,6 @@
     
     //订车记录删除
     var delSetcar= function(id,name){
-    	/* $('#del-carId').val(id);
-    	zDialog.confirm('警告：您确认要删除订车记录['+name+']吗？',function(){
-    		document.getElementById('delForm').submit();
-    		
-    		alert(456);
-    	});
-    	 */
     	var diag = new zDialog();
 		diag.Height = 150;
 		diag.Width = 320;
@@ -323,11 +316,7 @@
 				}
 </script>    
 
-<form id="delForm" name="delForm" method="post" action="doDelOaKf.do" target="thisFrame">
-	<input type="hidden" id="del-carId" name="carId">
-	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">
-	<input type="hidden" id="edit-ownId" name="ownId" value="${ownId }">
-</form>
+
 <%-- <form id="editForm" name="editForm" method="post" action="toEditOaKf.do" target="_self">
 	<input type="hidden" id="edit-carId" name="carId">
 	<input type="hidden" id="edit-parentId" name="parentId" value="${parentId }">

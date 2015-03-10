@@ -56,7 +56,7 @@
 <!-- BEGIN BODY -->
 <body>
 	<div id="wrap">
-				<form id="delForm" name="delForm" method="post" action="doOaJhmDel.do" target="thisFrame">
+				<form id="delForm" name="delForm" method="post" action="doOaJhmDel.do" target="_self">
 					<input type="hidden" id="del-jhmId" name="jhmId" value="${jhmId }">
 					<input type="hidden" id="del-parentId" name="parentId" value="${parentId }">
 					<input type="hidden" id="del-ownId" name="ownId" value="${ownId }">
