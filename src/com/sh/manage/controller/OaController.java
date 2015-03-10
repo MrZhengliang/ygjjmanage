@@ -611,7 +611,7 @@ public class OaController {
 				//new giffgaff
 				TOaGiffgaff giffgaff = new TOaGiffgaff();
 				
-				giffgaff.setAmount(amount==null?0.0:Double.valueOf(amount));
+				giffgaff.setAmount(amount==null||amount==""?0.0:Double.valueOf(amount));
 				giffgaff.setBuyDate(buyDate==null?"":buyDate.replaceAll("-", ""));
 				giffgaff.setDeliverCode(deliverCode);//快递单
 				giffgaff.setMasterCard(masterCard);//激活码
@@ -760,8 +760,6 @@ public class OaController {
 	    	LoginUser _loginUser = (LoginUser) session.getAttribute(SessionConstants.LOGIN_USER);
 			if (null != _loginUser) {
 				//get/new TOaGiffgaff
-//				TOaGiffgaffDTO giffgaff = oaService.findTOaGiffgaffDTO(jhmId);
-//				model.addObject("giffgaff", giffgaff);
 				try {
 					//get请求转换搜索的中文，防止出现乱码问题
 					String applyMethod = request.getMethod();
@@ -788,7 +786,7 @@ public class OaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/doOaJhmDel.do", method = RequestMethod.POST)
-	public ResponseEntity<String> oaJhmDel(
+	public ResponseEntity<String> doDelOaJhm(
 			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
 			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
 			@RequestParam(value = "jhmId", required = false, defaultValue = "") Integer jhmId,
@@ -820,10 +818,10 @@ public class OaController {
 			logger.error("controller:激活码删除异常!"+jhmId,e);
 			msg="激活码删除出现异常";
 			model.addAttribute("msg", msg);
-			return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);			
+			return new ResponseEntity<String>("<script>alert('" + msg + "');window.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);			
 		}
 		logger.info("controller:激活码删除结束!");
-		return new ResponseEntity<String>("<script>alert('" + msg + "');location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<String>("<script>alert('" + msg + "');window.location.href='" + WebUtils.formatURI(request, "/oajhmmanage.do?parentId="+parentId+"&ownId="+ownId)+"'</script>",responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
