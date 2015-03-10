@@ -317,8 +317,8 @@ public class UserController {
 	@RequestMapping(value = "/umanage.do")
 	public ModelAndView sysUserManagePage(HttpServletRequest req,
 			HttpServletResponse resp,
-			@RequestParam(value = "parentId", required = false, defaultValue = "") Integer parentId,
-			@RequestParam(value = "ownId", required = false, defaultValue = "") Integer ownId,
+			@RequestParam(value = "parentId", required = false, defaultValue = "") String parentId,
+			@RequestParam(value = "ownId", required = false, defaultValue = "") String ownId,
 			@RequestParam(value = "usercode", required = false, defaultValue = "") String usercode,
 			@RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
 			@RequestParam(value = "endDate", required = false, defaultValue = "") String endDate,
